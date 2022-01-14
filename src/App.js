@@ -5,7 +5,7 @@ import { Link } from '@mui/material';
 
 import { loadUser } from "./redux/user/user.action"
 
-function App() {
+export default function App() {
   const userState = useSelector((state) => state.userState)
   const dispatch = useDispatch();
 
@@ -17,5 +17,3 @@ function App() {
     Admin Login
   </Link >;
 }
-
-export default App;

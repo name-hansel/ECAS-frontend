@@ -20,8 +20,8 @@ export const loadUser = () => {
 export const login = (password) => {
   return async dispatch => {
     try {
-      const res = await api.post('/admin/auth/login', { password });
-      console.log(res.data) // Message
+      const { data } = await api.post('/admin/auth/login', { password });
+      console.log(data) // Message
       dispatch({
         type: "LOAD_USER",
         payload: {
@@ -29,8 +29,25 @@ export const login = (password) => {
         }
       })
     } catch (err) {
-      // TODO dispatch logout action
-      console.log(err.response.data)
+      dispatch({
+        type: "AUTH_ERROR"
+      })
+    }
+  }
+}
+
+export const logout = () => {
+  return async dispatch => {
+    try {
+      const { data } = await api.post("/auth/logout");
+      // data.message
+      dispatch({
+        type: "LOGOUT"
+      })
+    } catch (err) {
+      dispatch({
+        type: "AUTH_ERROR"
+      })
     }
   }
 }

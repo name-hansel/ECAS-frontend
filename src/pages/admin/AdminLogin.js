@@ -24,7 +24,6 @@ export default function AdminLogin() {
     <Typography variant="h3" style={{ textAlign: 'center' }}>
       Admin Login
     </Typography>
-    <p>{password}</p>
     <form onSubmit={AdminLogin}>
       <TextField type="password" value={password} label="Admin Password" variant="outlined" onChange={e => setPassword(e.target.value)} />
       <Button type="submit" variant="contained">Login</Button>

@@ -1,6 +1,7 @@
 import {
   LOAD_USER,
-  AUTH_ERROR
+  AUTH_ERROR,
+  LOGOUT
 } from "./user.types"
 
 const initialState = {
@@ -11,6 +12,7 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
+    case LOGOUT:
     case AUTH_ERROR: return {
       ...state,
       isAuthenticated: false,
