@@ -12,15 +12,12 @@ export default function AdminLogin() {
   const userState = useSelector(state => state.userState)
   const dispatch = useDispatch();
 
-  // If user is logged in and an admin, redirect
-  if (userState.isAuthenticated && userState.user.role === "admin") return <Navigate to="/admin/dashboard" />
-
   const AdminLogin = (e) => {
     e.preventDefault();
     dispatch(login(password))
   }
 
-  return <Container>
+  return userState.isAuthenticated ? <Navigate to="/dashboard" /> : <Container>
     <Typography variant="h3" style={{ textAlign: 'center' }}>
       Admin Login
     </Typography>
@@ -28,5 +25,5 @@ export default function AdminLogin() {
       <TextField type="password" value={password} label="Admin Password" variant="outlined" onChange={e => setPassword(e.target.value)} />
       <Button type="submit" variant="contained">Login</Button>
     </form>
-  </Container>
+  </Container>;
 }

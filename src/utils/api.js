@@ -1,4 +1,6 @@
 import axios from 'axios';
+import store from '../redux/store';
+import { LOGOUT } from '../redux/user/user.types';
 
 // Create an instance of axios
 const api = axios.create({
@@ -8,6 +10,14 @@ const api = axios.create({
   }
 });
 
-// TODO add interceptor
+api.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (err.response.status === 401) {
+      store.dispatch({ type: LOGOUT });
+    }
+    return Promise.reject(err);
+  }
+);
 
 export default api;

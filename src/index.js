@@ -8,7 +8,7 @@ import store from "./redux/store";
 import RequireAuth from "./components/routing/RequireAuth"
 
 import AdminLogin from "./pages/admin/AdminLogin"
-import AdminDashboard from "./pages/admin/AdminDashboard"
+import Dashboard from "./pages/Dashboard"
 
 ReactDOM.render(
   <Provider store={store}>
@@ -17,10 +17,10 @@ ReactDOM.render(
         <Route path="/" element={<App />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route
-          path="/admin/dashboard"
+          path="/dashboard"
           element={
-            <RequireAuth role="admin">
-              <AdminDashboard />
+            <RequireAuth role="exam_cell">
+              <Dashboard />
             </RequireAuth>
           }
         />
