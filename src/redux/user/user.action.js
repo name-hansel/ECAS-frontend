@@ -1,36 +1,53 @@
 import api from "../../utils/api"
+import { SET_SNACKBAR } from "../snackbar/snackbar.types";
+import { LOAD_USER, LOGOUT, AUTH_ERROR } from "./user.types";
 
 export const loadUser = () => {
   return async dispatch => {
     try {
       const res = await api.get("/auth");
-      // res.data contains payload for dispatch
       dispatch({
-        type: "LOAD_USER",
+        type: LOAD_USER,
         payload: res.data
       })
     } catch (err) {
+      if (err.response.status !== 400) dispatch({
+        type: SET_SNACKBAR,
+        payload: {
+          snackbarOpen: true,
+          snackbarType: "error",
+          snackbarMessage: err.response.data.error
+        }
+      })
       dispatch({
-        type: "AUTH_ERROR"
+        type: AUTH_ERROR
       })
     }
   }
 }
 
+// Used only for admin login
 export const login = (password) => {
   return async dispatch => {
     try {
       const { data } = await api.post('/admin/auth/login', { password });
-      console.log(data) // Message
       dispatch({
-        type: "LOAD_USER",
+        type: LOAD_USER,
         payload: {
           role: "admin"
         }
       })
     } catch (err) {
+      if (err.response) dispatch({
+        type: SET_SNACKBAR,
+        payload: {
+          snackbarOpen: true,
+          snackbarType: "error",
+          snackbarMessage: err.response.data.error
+        }
+      })
       dispatch({
-        type: "AUTH_ERROR"
+        type: AUTH_ERROR
       })
     }
   }
@@ -40,13 +57,28 @@ export const logout = () => {
   return async dispatch => {
     try {
       const { data } = await api.post("/auth/logout");
-      // data.message
       dispatch({
-        type: "LOGOUT"
+        type: LOGOUT
+      })
+      dispatch({
+        type: SET_SNACKBAR,
+        payload: {
+          snackbarOpen: true,
+          snackbarType: "success",
+          snackbarMessage: data.message
+        }
       })
     } catch (err) {
+      if (err.response) dispatch({
+        type: SET_SNACKBAR,
+        payload: {
+          snackbarOpen: true,
+          snackbarType: "error",
+          snackbarMessage: err.response.data.error
+        }
+      })
       dispatch({
-        type: "AUTH_ERROR"
+        type: AUTH_ERROR
       })
     }
   }
