@@ -8,12 +8,11 @@ import PasswordIcon from '@mui/icons-material/Password';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 // Pages
-import ExamCell from "./ExamCell"
+import ExamCell from "./ManageExamCell"
 import ChangePassword from "./ChangePassword"
 
 // Components
 import Sidebar from "../../components/Sidebar";
-import Header from "../../components/Header"
 
 import { logout } from "../../redux/user/user.action"
 
@@ -41,14 +40,11 @@ export default function AdminDashboard() {
       component="main"
       sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, p: 3 }}
     >
-      {/* <Header /> */}
-      <Box>
-        <Routes>
-          <Route path="/" element={<ExamCell />} />
-          <Route path="/exam-cell" element={<ExamCell />} />
-          <Route path="/change-password" element={<ChangePassword />} />
-        </Routes>
-      </Box>
+      <Routes>
+        <Route path="/" element={<ExamCell />} />
+        <Route path="/exam-cell" element={<ExamCell />} />
+        <Route path="/change-password" element={<ChangePassword />} />
+      </Routes>
     </Box>
   </Box>
 }

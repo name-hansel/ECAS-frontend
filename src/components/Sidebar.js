@@ -1,6 +1,6 @@
-import { Drawer, Avatar, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Drawer, Avatar, List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material";
 
-const Sidebar = ({ itemList, name, avatar }) => {
+const Sidebar = ({ itemList, name, avatar, role }) => {
   const drawerWidth = 250;
 
   return <Drawer
@@ -18,16 +18,31 @@ const Sidebar = ({ itemList, name, avatar }) => {
     <Avatar
       alt="avatar"
       src={avatar}
-      sx={{ width: 150, height: 150 }}
+      sx={{ width: 100, height: 100 }}
       style={{
-        margin: '50px auto',
-        marginBottom: '10px'
+        margin: '20px auto',
+        marginTop: 'auto'
       }}
     />
-    <h1 style={{
+    {/* Name */}
+    <Typography variant="h5" gutterBottom component="div" style={{
       textAlign: "center",
-    }}>{name}</h1>
-    <List>
+      margin: '0 auto',
+    }}>
+      {name}
+    </Typography>
+    {/* Role */}
+    {role && <Typography variant="subtitle1" gutterBottom component="div" style={{
+      textAlign: "center",
+      margin: '0 auto',
+    }}>
+      {role}
+    </Typography>
+    }
+    {/* List */}
+    <List style={{
+      margin: "auto"
+    }}>
       {itemList.map((item, index) => {
         const { text, icon, onClick } = item;
         return (
