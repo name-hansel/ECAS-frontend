@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import CircularProgress from '@mui/material/CircularProgress';
 
 // Actions
 import { loadUser } from "./redux/user/user.action"
@@ -21,7 +22,15 @@ export default function App() {
     dispatch(loadUser())
   }, [])
 
-  if (userState.loading) return <h1>Loading</h1>
+  if (userState.loading) return <CircularProgress style={{
+    position: 'absolute',
+    height: '100px',
+    width: '100px',
+    top: '50%',
+    left: '50%',
+    marginLeft: '-50px',
+    marginTop: '-50px',
+  }} />
   return (
     <>
       <Snackbar />
