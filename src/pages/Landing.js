@@ -1,18 +1,29 @@
 import { useSelector, useDispatch } from "react-redux"
-import { Link } from '@mui/material';
-import { Link as RouterLink, Navigate, useSearchParams } from "react-router-dom";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import SchoolIcon from '@mui/icons-material/School';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import CoPresentIcon from '@mui/icons-material/CoPresent';
+import Header from '../components/Header';
+import './LoginCard.css';
+import { Navigate, useSearchParams, useNavigate } from "react-router-dom";
 
 import { setSnackbar } from "../redux/snackbar/snackbar.action"
 
 export default function Landing() {
   const userState = useSelector(state => state.userState);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Check if error is present in query
   const [searchParams] = useSearchParams();
-  if (searchParams.get("error")) dispatch(setSnackbar(true, "error", searchParams.get("error")))
 
   if (userState.isAuthenticated) return <Navigate to="/dashboard" />
+
+  const error = searchParams.get("error")
+  if (error && error === "user_not_found") dispatch(setSnackbar(true, "error", "User with associated email address not found"))
 
   const getGoogleOAuthURL = (role) => {
     const rootUrl = `https://accounts.google.com/o/oauth2/v2/auth`
@@ -34,14 +45,58 @@ export default function Landing() {
     return `${rootUrl}?${qs.toString()}`
   }
 
-  return <>
-    <h5>Login with Google as -</h5>
-    <a href={getGoogleOAuthURL("student")}>Student</a><br />
-    <a href={getGoogleOAuthURL("exam_cell")}>ExamCell</a><br />
-    <a href={getGoogleOAuthURL("faculty")}>Faculty</a>
-    <br />
-    <Link component={RouterLink} to="/admin-login" variant="body1" >
+  return <Box
+    component="main"
+    sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, p: 3 }}
+  >
+    <Header />
+    <Typography variant="h5" style={{ textAlign: 'center' }}>
+      Login with MES account as...
+    </Typography>
+    <Box sx={{ display: 'flex', justifyContent: 'space-evenly', margin: '8% 10%' }}>
+      {/* Student */}
+      <a href={getGoogleOAuthURL("student")}>
+        <div className="icon-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <SchoolIcon
+            className='btn'
+            sx={{ fontSize: 100 }}
+            style={{ cursor: 'pointer' }}
+          />
+          <Typography variant="h5">Student</Typography>
+        </div>
+      </a>
+      {/* Exam Cell */}
+      <a href={getGoogleOAuthURL("exam_cell")}>
+        <div className="icon-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <ApartmentIcon
+            className='btn'
+            sx={{ fontSize: 100 }}
+            style={{ cursor: 'pointer' }}
+          />
+          <Typography variant="h5">Exam Cell</Typography>
+        </div>
+      </a>
+      {/* Faculty */}
+      <a href={getGoogleOAuthURL("faculty")}>
+        <div className="icon-text" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <CoPresentIcon
+            className='btn'
+            sx={{ fontSize: 100 }}
+            style={{ cursor: 'pointer' }}
+          />
+          <Typography variant="h5">Faculty</Typography>
+        </div>
+      </a>
+    </Box>
+    <Button
+      variant='contained'
+      color='success'
+      size='large'
+      startIcon={<AdminPanelSettingsIcon />}
+      style={{ position: 'absolute', bottom: '20px', right: '20px' }}
+      onClick={() => navigate("/admin-login")}
+    >
       Admin Login
-    </Link >
-  </>
+    </Button>
+  </Box>
 }
