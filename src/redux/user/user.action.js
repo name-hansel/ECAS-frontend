@@ -30,7 +30,7 @@ export const loadUser = () => {
 export const login = (password) => {
   return async dispatch => {
     try {
-      const { data } = await api.post('/admin/auth/login', { password });
+      await api.post('/admin/auth/login', { password });
       dispatch({
         type: LOAD_USER,
         payload: {

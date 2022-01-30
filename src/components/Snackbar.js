@@ -6,6 +6,9 @@ import { setSnackbar } from "../redux/snackbar/snackbar.action"
 const SnackbarElement = () => {
   const dispatch = useDispatch();
 
+  const vertical = "bottom"
+  const horizontal = "right"
+
   const { snackbarOpen, snackbarType, snackbarMessage } = useSelector(state => state.snackbar)
 
   const handleClose = (event, reason) => {
@@ -15,7 +18,7 @@ const SnackbarElement = () => {
 
   return (
     <div>
-      <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleClose}>
+      <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{ vertical, horizontal }}>
         <Alert elevation={6} variant='filled' severity={snackbarType} onClose={handleClose}>{snackbarMessage}
         </Alert>
       </Snackbar>
