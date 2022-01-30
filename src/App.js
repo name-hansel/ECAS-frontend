@@ -30,7 +30,7 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/admin-login" element={<AdminLogin />} />
           <Route
-            path="/dashboard"
+            path="/dashboard/*"
             element={
               <RequireAuth>
                 <Dashboard />
