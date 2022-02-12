@@ -1,7 +1,20 @@
-import { Drawer, Avatar, List, ListItem, ListItemIcon, ListItemText, Typography } from "@mui/material";
+import { Drawer, Avatar, List, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import { Link, useLocation } from "react-router-dom"
 
 const Sidebar = ({ itemList, name, avatar, role }) => {
   const drawerWidth = 250;
+  const location = useLocation();
+
+  const CustomListItemButton = styled(ListItemButton)(() => ({
+    '&.Mui-selected': {
+      backgroundColor: '#dedede',
+    }, '&.Mui-selected:hover': {
+      backgroundColor: '#dedede',
+    }, '&:hover': {
+      backgroundColor: '#eeeeee'
+    }
+  }))
 
   return <Drawer
     sx={{
@@ -44,12 +57,18 @@ const Sidebar = ({ itemList, name, avatar, role }) => {
       margin: "auto"
     }}>
       {itemList.map((item, index) => {
-        const { text, icon, onClick } = item;
+        const { text, icon, to, onClick } = item;
         return (
-          <ListItem button key={text} onClick={onClick}>
+          <CustomListItemButton
+            key={text}
+            component={Link}
+            to={to}
+            selected={to === location.pathname}
+            onClick={onClick ? onClick : null}
+          >
             {icon && <ListItemIcon>{icon}</ListItemIcon>}
             <ListItemText primary={text} />
-          </ListItem>
+          </CustomListItemButton>
         );
       })}
     </List>

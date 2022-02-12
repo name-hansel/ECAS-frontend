@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux"
-import { Routes, Route, useNavigate } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 import Box from '@mui/material/Box';
 
 // Icons
@@ -17,22 +17,22 @@ import Sidebar from "../../components/Sidebar";
 import { logout } from "../../redux/user/user.action"
 
 export default function AdminDashboard() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   return <Box sx={{ display: 'flex' }}>
     <Sidebar itemList={[
       {
         text: "Exam Cell",
         icon: <GroupIcon />,
-        onClick: () => navigate("./exam-cell")
+        to: '/dashboard/exam-cell',
       },
       {
         text: "Change Password",
         icon: <PasswordIcon />,
-        onClick: () => navigate("./change-password")
+        to: '/dashboard/change-password',
       }, {
         text: "Logout",
         icon: <LogoutIcon />,
+        to: "",
         onClick: e => dispatch(logout())
       }
     ]} name={"Admin"} avatar={""} />

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Box } from "@mui/material"
-import { useNavigate, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -23,7 +23,6 @@ import { logout } from "../../redux/user/user.action"
 
 export default function ExamCellDashboard() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const user = useSelector(state => state.userState.user)
 
   return <Box sx={{ display: 'flex' }}>
@@ -31,26 +30,27 @@ export default function ExamCellDashboard() {
       {
         text: "Academic Session",
         icon: <ScheduleIcon />,
-        onClick: () => navigate("./academic-session")
+        to: '/dashboard/academic-session'
       }, {
         text: "Branch",
         icon: <MergeTypeIcon />,
-        onClick: () => navigate("./branch")
+        to: '/dashboard/branch'
       }, {
         text: "Course",
         icon: <ClassIcon />,
-        onClick: () => navigate("./course")
+        to: '/dashboard/course'
       }, {
         text: "Student",
         icon: <SchoolIcon />,
-        onClick: () => navigate("./student")
+        to: '/dashboard/student'
       }, {
         text: "Faculty",
         icon: <ApartmentIcon />,
-        onClick: () => navigate("./faculty")
+        to: '/dashboard/faculty'
       }, {
         text: "Logout",
         icon: <LogoutIcon />,
+        to: '',
         onClick: e => dispatch(logout())
       }
     ]} avatar={user.picture} name={[user.firstName, user.lastName].join(" ")} role={"Exam Cell"} />
