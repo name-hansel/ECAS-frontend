@@ -1,4 +1,7 @@
 import { useSelector, useDispatch } from "react-redux"
+import { Navigate, useSearchParams, useNavigate } from "react-router-dom";
+
+// MUI
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -6,10 +9,9 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import SchoolIcon from '@mui/icons-material/School';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import CoPresentIcon from '@mui/icons-material/CoPresent';
+
 import Header from '../components/Header';
 import './LoginCard.css';
-import { Navigate, useSearchParams, useNavigate } from "react-router-dom";
-
 import { setSnackbar } from "../redux/snackbar/snackbar.action"
 
 export default function Landing() {

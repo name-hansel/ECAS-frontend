@@ -9,7 +9,7 @@ const DashboardHeader = ({ heading, backgroundColor }) => {
     }}>
       <Typography variant="h5" style={{
         textAlign: "right",
-        margin: '80px 20px 10px 60px',
+        margin: '80px 30px 20px 60px',
         color: 'white'
       }}>{heading}</Typography>
     </Paper >
