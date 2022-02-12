@@ -1,7 +1,7 @@
-import React from 'react';
+import DashboardHeader from "../../components/DashboardHeader"
 
 const ManageAcademicSession = () => {
-  return <div>ManageAcademicSession</div>;
+  return <DashboardHeader heading={"Manage Academic Session"} backgroundColor={'#99EED3'} />
 };
 
 export default ManageAcademicSession;

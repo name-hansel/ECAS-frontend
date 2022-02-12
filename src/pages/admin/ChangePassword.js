@@ -1,5 +1,7 @@
+import DashboardHeader from "../../components/DashboardHeader"
+
 const ChangePassword = () => {
-  return <h1>ChangePassword</h1>
+  return <DashboardHeader heading={"Change Password"} backgroundColor={'#99BBD3'} />
 }
 
 export default ChangePassword;

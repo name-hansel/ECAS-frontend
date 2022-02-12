@@ -1,5 +1,7 @@
+import DashboardHeader from "../../components/DashboardHeader"
+
 const ExamCell = () => {
-  return <h1>ExamCell</h1>
+  return <DashboardHeader heading={"Manage ExamCell"} backgroundColor={'#99CCD3'} />
 }
 
 export default ExamCell;
