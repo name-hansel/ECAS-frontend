@@ -13,9 +13,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
 const AddEditExamCell = ({
-  open, setOpen, examCellMembers, setExamCellMembers
+  open, setOpen, dispatch
 }) => {
-  const dispatch = useDispatch();
+  const reduxDispatch = useDispatch();
 
   // Handle closing dialog box (set open to false) and clear state
   const setDialogClose = () => {
@@ -84,9 +84,12 @@ const AddEditExamCell = ({
       const { data } = await api.post("/admin/exam_cell", {
         ...examCellMember
       })
-      setExamCellMembers([...examCellMembers, data])
+      dispatch({
+        type: 'ADD_EXAM_CELL_MEMBER',
+        payload: data
+      })
       setDialogClose();
-      dispatch(setSnackbar(true, "success", "Added new Exam Cell Member successfully!"))
+      reduxDispatch(setSnackbar(true, "success", "Added new Exam Cell Member successfully!"))
     }
     catch (err) {
       if (err.response) {
@@ -97,7 +100,7 @@ const AddEditExamCell = ({
           })
           setFormErrors({ ...formErrors, ...errors })
         } else {
-          dispatch(setSnackbar(true, "error", err.response.data.error))
+          reduxDispatch(setSnackbar(true, "error", err.response.data.error))
         }
       }
     }

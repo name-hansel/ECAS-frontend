@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useReducer } from "react"
 import { useDispatch } from "react-redux"
 import api from "../../utils/api"
 
@@ -24,14 +24,32 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-// TODO useReducer
 // TODO edit exam cell
 
 const ExamCell = () => {
-  const dispatch = useDispatch();
+  const reduxDispatch = useDispatch();
 
-  // Fetch data from API and store in state array
-  const [examCellMembers, setExamCellMembers] = useState([]);
+  // State containing exam cell members already in database
+  const [state, dispatch] = useReducer(reducer, []);
+
+  // Reducer for exam cell members
+  function reducer(state, action) {
+    let newState;
+    switch (action.type) {
+      case 'LOAD_EXAM_CELL_MEMBERS':
+        newState = [...action.payload]
+        break;
+      case 'ADD_EXAM_CELL_MEMBER':
+        newState = [...state, action.payload]
+        break;
+      case 'DELETE_EXAM_CELL_MEMBER':
+        newState = state.filter(ec => ec._id !== action.payload)
+        break;
+      default:
+        throw new Error();
+    }
+    return newState;
+  }
 
   // State to handle dialog box open status
   const [open, setOpen] = useState(false);
@@ -51,7 +69,10 @@ const ExamCell = () => {
     let mounted = true;
     getExamCellMembers().then(data => {
       if (mounted) {
-        setExamCellMembers(data);
+        dispatch({
+          type: 'LOAD_EXAM_CELL_MEMBERS',
+          payload: data
+        });
         setLoading(false)
       }
     })
@@ -77,8 +98,12 @@ const ExamCell = () => {
   const deleteExamCellMember = async (_id) => {
     try {
       await api.delete(`/admin/exam_cell/${_id}`)
-      setExamCellMembers(examCellMembers.filter(ec => ec._id !== _id))
-      dispatch(setSnackbar(true, "success", "Deleted Exam Cell Member successfully!"))
+      // setExamCellMembers(examCellMembers.filter(ec => ec._id !== _id))
+      dispatch({
+        type: 'DELETE_EXAM_CELL_MEMBER',
+        payload: _id
+      })
+      reduxDispatch(setSnackbar(true, "success", "Deleted Exam Cell Member successfully!"))
     } catch (err) {
       console.log(err)
     }
@@ -113,7 +138,7 @@ const ExamCell = () => {
                 <TableBody>
                   {/* Map through array of examcell members */}
                   {
-                    examCellMembers.map((member) => (
+                    state.map((member) => (
                       <TableRow key={member.employeeId}>
                         <TableCell>{member.employeeId}</TableCell>
                         <TableCell>{[member.firstName, member.lastName].join(" ")}</TableCell>
@@ -139,8 +164,8 @@ const ExamCell = () => {
             <AddEditExamCell
               open={open}
               setOpen={setOpen}
-              setExamCellMembers={setExamCellMembers}
-              examCellMembers={examCellMembers} />
+              dispatch={dispatch}
+            />
           </Box>
         )
       }
