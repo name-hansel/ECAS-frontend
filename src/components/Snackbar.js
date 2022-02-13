@@ -14,7 +14,7 @@ const SnackbarElement = () => {
 
   return (
     <div>
-      <Snackbar open={snackbarOpen} autoHideDuration={2000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+      <Snackbar open={snackbarOpen} autoHideDuration={1000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
         <Alert elevation={6} variant='filled' severity={snackbarType} onClose={handleClose}>{snackbarMessage}
         </Alert>
       </Snackbar>
