@@ -1,11 +1,9 @@
 import { useState, useEffect, useReducer } from "react"
-import { useDispatch } from "react-redux"
 import api from "../../utils/api"
 
 import DashboardHeader from "../../components/DashboardHeader"
 import AddEditExamCell from "../../components/dialog/AddEditExamCell"
-
-import { setSnackbar } from "../../redux/snackbar/snackbar.action"
+import DeleteExamCell from "../../components/dialog/DeleteExamCell"
 
 // MUI components
 import { styled } from '@mui/material/styles';
@@ -24,35 +22,43 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-// TODO edit exam cell
-
 const ExamCell = () => {
-  const reduxDispatch = useDispatch();
-
   // State containing exam cell members already in database
   const [state, dispatch] = useReducer(reducer, []);
 
   // Reducer for exam cell members
   function reducer(state, action) {
-    let newState;
     switch (action.type) {
       case 'LOAD_EXAM_CELL_MEMBERS':
-        newState = [...action.payload]
-        break;
+        return action.payload
       case 'ADD_EXAM_CELL_MEMBER':
-        newState = [...state, action.payload]
-        break;
+        return [...state, action.payload]
+      case 'EDIT_EXAM_CELL_MEMBER':
+        return state.map(ec => {
+          if (ec._id === action.payload._id) return action.payload
+          else return ec
+        })
       case 'DELETE_EXAM_CELL_MEMBER':
-        newState = state.filter(ec => ec._id !== action.payload)
-        break;
+        return state.filter(ec => ec._id !== action.payload)
       default:
         throw new Error();
     }
-    return newState;
   }
+
+  // State to store which member we are editing
+  const [memberToBeEditedId, setMemberToBeEditedId] = useState(null);
 
   // State to handle dialog box open status
   const [open, setOpen] = useState(false);
+
+  // State to handle delete confirmation dialog open status
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  // State to store name of EC member to delete
+  const [deleteName, setDeleteName] = useState("");
+
+  // State to store _id of EC member to delete
+  const [deleteId, setDeleteId] = useState("");
 
   // Set loading to true to show spinner
   // False once data is fetched
@@ -91,22 +97,8 @@ const ExamCell = () => {
 
   // Function to edit examcell member
   const editExamCellMember = (_id) => {
-    console.log(_id)
-  }
-
-  // Function to delete examcell member
-  const deleteExamCellMember = async (_id) => {
-    try {
-      await api.delete(`/admin/exam_cell/${_id}`)
-      // setExamCellMembers(examCellMembers.filter(ec => ec._id !== _id))
-      dispatch({
-        type: 'DELETE_EXAM_CELL_MEMBER',
-        payload: _id
-      })
-      reduxDispatch(setSnackbar(true, "success", "Deleted Exam Cell Member successfully!"))
-    } catch (err) {
-      console.log(err)
-    }
+    setMemberToBeEditedId(_id);
+    setOpen(true);
   }
 
   return (
@@ -150,7 +142,11 @@ const ExamCell = () => {
                           </IconButton>
                         </TableCell>
                         <TableCell align="center">
-                          <IconButton onClick={() => deleteExamCellMember(member._id)}>
+                          <IconButton onClick={() => {
+                            setDeleteName([member.firstName, member.lastName].join(" "))
+                            setDeleteId(member._id)
+                            setDeleteOpen(true)
+                          }}>
                             <DeleteIcon />
                           </IconButton>
                         </TableCell>
@@ -161,10 +157,19 @@ const ExamCell = () => {
               </Table>
             </TableContainer>
 
+            <DeleteExamCell
+              open={deleteOpen}
+              setOpen={setDeleteOpen}
+              name={deleteName}
+              dispatch={dispatch}
+              _id={deleteId}
+            />
             <AddEditExamCell
               open={open}
               setOpen={setOpen}
               dispatch={dispatch}
+              setMemberToBeEditedId={setMemberToBeEditedId}
+              _id={memberToBeEditedId}
             />
           </Box>
         )

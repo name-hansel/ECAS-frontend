@@ -13,18 +13,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
 const AddEditExamCell = ({
-  open, setOpen, dispatch
+  open, setOpen, dispatch, _id, setMemberToBeEditedId
 }) => {
   const reduxDispatch = useDispatch();
-
-  // Handle closing dialog box (set open to false) and clear state
-  const setDialogClose = () => {
-    setOpen(false);
-    // Clear any exam cell member details from dialog box
-    setExamCellMember(initialExamCellMemberState)
-    // Clear form errors
-    setFormErrors(initialFormErrorsState)
-  }
 
   // Initial state for form errors
   const initialFormErrorsState = {
@@ -41,8 +32,45 @@ const AddEditExamCell = ({
     email: "",
     phoneNumber: ""
   }
+
   // State to handle dialog data
   const [examCellMember, setExamCellMember] = React.useState(initialExamCellMemberState);
+
+  const [loading, setLoading] = React.useState(_id ? true : false);
+
+  // Get examcell member details by id to fill dialog when updating
+  const getExamCellMember = async (_id) => {
+    const { data } = await api.get(`/admin/exam_cell/${_id}`);
+    return data;
+  }
+
+  React.useEffect(() => {
+    // No ID is passed to dialog
+    // Which means user wants to add new member instead of editing an existing member
+    if (!_id) return
+    let mounted = true;
+    getExamCellMember(_id).then(data => {
+      if (mounted) {
+        setExamCellMember({ ...data })
+        setLoading(false);
+      }
+    })
+    return () => mounted = false;
+  }, [_id])
+
+  // Handle closing dialog box (set open to false) and clear state
+  const setDialogClose = () => {
+    setOpen(false);
+
+    // Clear any exam cell member details from dialog box
+    setExamCellMember(initialExamCellMemberState);
+
+    // Clear form errors
+    setFormErrors(initialFormErrorsState);
+
+    // Clear member to be edited ID
+    setMemberToBeEditedId(null);
+  }
 
   // Function to handle form change to update state
   const handleFormChange = (e) => {
@@ -106,11 +134,46 @@ const AddEditExamCell = ({
     }
   }
 
+  // Function to handle onSubmit form to edit an exam cell member
+  const editExamCellMember = async (e) => {
+    try {
+      e.preventDefault();
+      if (!examCellMemberValidation()) {
+        return
+      }
+      const { data } = await api.put(`/admin/exam_cell/${_id}`, {
+        ...examCellMember
+      })
+      dispatch({
+        type: 'EDIT_EXAM_CELL_MEMBER',
+        payload: data
+      })
+      setDialogClose();
+      reduxDispatch(setSnackbar(true, "success", "Updated Exam Cell Member successfully!"))
+    } catch (err) {
+      if (err.response) {
+        if (Array.isArray(err.response.data.error)) {
+          const errors = {};
+          err.response.data.error.forEach(({ param, msg }) => {
+            errors[`${param}Error`] = msg;
+          })
+          setFormErrors({ ...formErrors, ...errors })
+        } else {
+          reduxDispatch(setSnackbar(true, "error", err.response.data.error))
+        }
+      }
+    }
+  }
+
   return (
-    <Dialog open={open} onClose={setDialogClose}>
-      <DialogTitle align="center">Add New Exam Cell Member</DialogTitle>
-      <form onSubmit={addNewExamCellMember}>
-        <DialogContent sx={{ p: 3 }} align="center">
+    loading ? <></> : <Dialog open={open} onClose={setDialogClose}>
+      <DialogTitle>
+        {
+          _id ? "Edit Exam Cell Member" : "Add New Exam Cell Member"
+        }
+      </DialogTitle>
+      <form onSubmit={_id ? editExamCellMember : addNewExamCellMember}>
+        <DialogContent>
           <TextField
             label="Employee ID"
             variant="standard"
@@ -159,7 +222,11 @@ const AddEditExamCell = ({
         </DialogContent>
         <DialogActions sx={{ p: 3 }}>
           <Button variant="outlined" onClick={setDialogClose}>Cancel</Button>
-          <Button variant="outlined" type="submit">Add</Button>
+          <Button variant="outlined" type="submit">
+            {
+              _id ? "Edit" : "Add"
+            }
+          </Button>
         </DialogActions>
       </form>
     </Dialog>
