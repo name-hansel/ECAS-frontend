@@ -17,6 +17,7 @@ import FormLabel from '@mui/material/FormLabel';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
+import { Typography } from '@mui/material';
 
 const ManageAcademicSession = () => {
   const [open, setOpen] = React.useState(false);
@@ -36,85 +37,81 @@ const ManageAcademicSession = () => {
         backgroundColor={'#99EED3'}
       />
       <div style={{ textAlign: 'center', paddingTop: '100px' }}>
-        <h3>Current Academic Year: 2021-2022</h3>
-        <h3>Current Academic Term: Even</h3>
+        <Typography
+          variant='h5'
+          style={{
+            color: 'black',
+          }}
+        >
+          Current Academic Year: 2021-2022
+        </Typography>
+        <Typography
+          variant='h5'
+          style={{
+            color: 'black',
+          }}
+        >
+          Current Academic Term: Even
+        </Typography>
 
         <div style={{ paddingTop: '10vh' }}>
-          <Button
-            variant='contained'
-            onClick={handleClickOpen}
-            color='success'
-            size='medium'
+          <Typography
+            variant='h5'
+            style={{
+              color: 'black',
+            }}
           >
-            Add New Session
-          </Button>
-          <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Add New Session</DialogTitle>
+            <Button
+              variant='contained'
+              onClick={handleClickOpen}
+              color='success'
+              size='medium'
+            >
+              Add New Session
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle>Add New Session</DialogTitle>
 
-            <DialogContent>
-              <Box
-                component='form'
-                sx={{
-                  '& .MuiTextField-root': { m: 1, width: '25ch' },
-                }}
-                noValidate
-                autoComplete='off'
-              >
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                  <div>
-                    <DatePicker
-                      views={['year']}
-                      label='From'
-                      value={value}
-                      onChange={(newValue) => {
-                        setValue(newValue);
-                      }}
-                      renderInput={(params) => (
-                        <TextField {...params} helperText={null} />
-                      )}
-                    />
+              <DialogContent>
+                <Box
+                  component='form'
+                  sx={{
+                    '& .MuiTextField-root': { m: 1, width: '25ch' },
+                  }}
+                  noValidate
+                  autoComplete='off'
+                >
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <div>
+                      <DatePicker
+                        views={['year']}
+                        label='From'
+                        value={value}
+                        onChange={(newValue) => {
+                          setValue(newValue);
+                        }}
+                        renderInput={(params) => (
+                          <TextField {...params} helperText={null} />
+                        )}
+                      />
 
-                    <DatePicker
-                      views={['year']}
-                      label='To'
-                      value={value}
-                      onChange={(newValue) => {
-                        setValue(newValue);
-                      }}
-                      renderInput={(params) => (
-                        <TextField {...params} helperText={null} />
-                      )}
-                    />
-                  </div>
-                </LocalizationProvider>
+                      <DatePicker
+                        views={['year']}
+                        label='To'
+                        value={value}
+                        onChange={(newValue) => {
+                          setValue(newValue);
+                        }}
+                        renderInput={(params) => (
+                          <TextField {...params} helperText={null} />
+                        )}
+                      />
+                    </div>
+                  </LocalizationProvider>
 
-                <FormControl>
-                  <FormLabel id='demo-row-radio-buttons-group-label'>
-                    Session
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby='demo-row-radio-buttons-group-label'
-                    name='row-radio-buttons-group'
-                  >
-                    <FormControlLabel
-                      value='Odd'
-                      control={<Radio />}
-                      label='Odd'
-                    />
-                    <FormControlLabel
-                      value='Even'
-                      control={<Radio />}
-                      label='Even'
-                      style={{ paddingLeft: '10vh' }}
-                    />
-                  </RadioGroup>
-                </FormControl>
-
-                <div>
                   <FormControl>
                     <FormLabel id='demo-row-radio-buttons-group-label'>
-                      Current
+                      Session
                     </FormLabel>
                     <RadioGroup
                       row
@@ -122,27 +119,52 @@ const ManageAcademicSession = () => {
                       name='row-radio-buttons-group'
                     >
                       <FormControlLabel
-                        value='Yes'
+                        value='Odd'
                         control={<Radio />}
-                        label='Yes'
+                        label='Odd'
                       />
                       <FormControlLabel
-                        value='No'
+                        value='Even'
                         control={<Radio />}
-                        label='No'
-                        style={{ paddingLeft: '11vh' }}
+                        label='Even'
+                        style={{ paddingLeft: '10vh' }}
                       />
                     </RadioGroup>
                   </FormControl>
-                </div>
-              </Box>
-            </DialogContent>
 
-            <DialogActions>
-              <Button onClick={handleClose}>Save</Button>
-              <Button onClick={handleClose}>Cancel</Button>
-            </DialogActions>
-          </Dialog>
+                  <div>
+                    <FormControl>
+                      <FormLabel id='demo-row-radio-buttons-group-label'>
+                        Current
+                      </FormLabel>
+                      <RadioGroup
+                        row
+                        aria-labelledby='demo-row-radio-buttons-group-label'
+                        name='row-radio-buttons-group'
+                      >
+                        <FormControlLabel
+                          value='Yes'
+                          control={<Radio />}
+                          label='Yes'
+                        />
+                        <FormControlLabel
+                          value='No'
+                          control={<Radio />}
+                          label='No'
+                          style={{ paddingLeft: '11vh' }}
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </div>
+                </Box>
+              </DialogContent>
+
+              <DialogActions>
+                <Button onClick={handleClose}>Save</Button>
+                <Button onClick={handleClose}>Cancel</Button>
+              </DialogActions>
+            </Dialog>
+          </Typography>
         </div>
       </div>
     </>
