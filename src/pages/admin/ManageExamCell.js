@@ -105,74 +105,74 @@ const ExamCell = () => {
     <>
       <DashboardHeader heading={"Manage Exam Cell"} backgroundColor={'#99CCD3'} />
       {
-        loading ? (<CircularProgress />) : (
-          <Box>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              sx={{ flexGrow: 0, marginTop: 2 }}
-              onClick={() => setOpen(true)}>
-              Add New Member
-            </Button>
-
-            <TableContainer sx={{ marginTop: 2 }}>
-              <Table aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <StyledTableCell>Employee ID</StyledTableCell>
-                    <StyledTableCell>Name</StyledTableCell>
-                    <StyledTableCell>Email</StyledTableCell>
-                    <StyledTableCell>Phone Number</StyledTableCell>
-                    <StyledTableCell align="center">Edit</StyledTableCell>
-                    <StyledTableCell align="center">Delete</StyledTableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {/* Map through array of examcell members */}
-                  {
-                    state.map((member) => (
-                      <TableRow key={member.employeeId}>
-                        <TableCell>{member.employeeId}</TableCell>
-                        <TableCell>{[member.firstName, member.lastName].join(" ")}</TableCell>
-                        <TableCell>{member.email}</TableCell>
-                        <TableCell>{member.phoneNumber}</TableCell>
-                        <TableCell align="center">
-                          <IconButton onClick={() => editExamCellMember(member._id)}>
-                            <EditIcon />
-                          </IconButton>
-                        </TableCell>
-                        <TableCell align="center">
-                          <IconButton onClick={() => {
-                            setDeleteName([member.firstName, member.lastName].join(" "))
-                            setDeleteId(member._id)
-                            setDeleteOpen(true)
-                          }}>
-                            <DeleteIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  }
-                </TableBody>
-              </Table>
-            </TableContainer>
-
-            <DeleteExamCell
-              open={deleteOpen}
-              setOpen={setDeleteOpen}
-              name={deleteName}
-              dispatch={dispatch}
-              _id={deleteId}
-            />
-            <AddEditExamCell
-              open={open}
-              setOpen={setOpen}
-              dispatch={dispatch}
-              setMemberToBeEditedId={setMemberToBeEditedId}
-              _id={memberToBeEditedId}
-            />
-          </Box>
-        )
+        <Box sx={{ display: 'inline-flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          {
+            loading ? <CircularProgress /> : <>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                sx={{ flexGrow: 0, marginTop: 2, alignSelf: 'flex-end' }}
+                onClick={() => setOpen(true)}>
+                Add New Member
+              </Button>
+              <TableContainer sx={{ marginTop: 2 }}>
+                <Table aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell>Employee ID</StyledTableCell>
+                      <StyledTableCell>Name</StyledTableCell>
+                      <StyledTableCell>Email</StyledTableCell>
+                      <StyledTableCell>Phone Number</StyledTableCell>
+                      <StyledTableCell align="center">Edit</StyledTableCell>
+                      <StyledTableCell align="center">Delete</StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {/* Map through array of examcell members */}
+                    {
+                      state.map((member) => (
+                        <TableRow key={member.employeeId}>
+                          <TableCell>{member.employeeId}</TableCell>
+                          <TableCell>{[member.firstName, member.lastName].join(" ")}</TableCell>
+                          <TableCell>{member.email}</TableCell>
+                          <TableCell>{member.phoneNumber}</TableCell>
+                          <TableCell align="center">
+                            <IconButton onClick={() => editExamCellMember(member._id)}>
+                              <EditIcon />
+                            </IconButton>
+                          </TableCell>
+                          <TableCell align="center">
+                            <IconButton onClick={() => {
+                              setDeleteName([member.firstName, member.lastName].join(" "))
+                              setDeleteId(member._id)
+                              setDeleteOpen(true)
+                            }}>
+                              <DeleteIcon />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    }
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <DeleteExamCell
+                open={deleteOpen}
+                setOpen={setDeleteOpen}
+                name={deleteName}
+                dispatch={dispatch}
+                _id={deleteId}
+              />
+              <AddEditExamCell
+                open={open}
+                setOpen={setOpen}
+                dispatch={dispatch}
+                setMemberToBeEditedId={setMemberToBeEditedId}
+                _id={memberToBeEditedId}
+              />
+            </>
+          }
+        </Box>
       }
     </>
   )
