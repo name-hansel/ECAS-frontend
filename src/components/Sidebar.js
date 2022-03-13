@@ -54,7 +54,8 @@ const Sidebar = ({ itemList, name, avatar, role }) => {
     }
     {/* List */}
     <List style={{
-      margin: "auto"
+      margin: "auto",
+      width: '90%'
     }}>
       {itemList.map((item, index) => {
         const { text, icon, to, onClick } = item;

@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { Box } from "@mui/material"
 import { Routes, Route } from "react-router-dom";
 
-import ScheduleIcon from '@mui/icons-material/Schedule';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MergeTypeIcon from '@mui/icons-material/MergeType';
 import ClassIcon from '@mui/icons-material/Class';
@@ -49,11 +48,6 @@ export default function ExamCellDashboard() {
         to: '',
         onClick: e => dispatch(logout())
       },
-      // {
-      //   text: "Academic Session",
-      //   icon: <ScheduleIcon />,
-      //   to: '/dashboard/academic-session'
-      // }
     ]} avatar={user.picture} name={[user.firstName, user.lastName].join(" ")} role={"Exam Cell"} />
     <Box
       component="main"
