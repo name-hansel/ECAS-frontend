@@ -224,7 +224,7 @@ const ManageStudent = () => {
                       <StyledTableCell>Class</StyledTableCell>
                       <StyledTableCell>Email</StyledTableCell>
                       <StyledTableCell>Ph. No.</StyledTableCell>
-                      <StyledTableCell align="center">Archive</StyledTableCell>
+                      <StyledTableCell align="center">Unarchive</StyledTableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
