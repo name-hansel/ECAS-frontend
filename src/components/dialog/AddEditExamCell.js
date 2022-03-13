@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 
 import api from "../../utils/api"
+import { validateDomain, validateEmail, validatePhoneNumber } from "../../utils/validation"
 import { setSnackbar } from '../../redux/snackbar/snackbar.action'
 
 import TextField from '@mui/material/TextField'
@@ -21,6 +22,7 @@ const AddEditExamCell = ({
   const initialFormErrorsState = {
     employeeIdError: "", firstNameError: "", lastNameError: "", emailError: "", phoneNumberError: ""
   }
+
   // Textfield errors
   const [formErrors, setFormErrors] = React.useState(initialFormErrorsState)
 
@@ -89,9 +91,10 @@ const AddEditExamCell = ({
     if (!employeeId || employeeId.length === 0) employeeIdError = "Employee ID is required"
     if (!firstName || firstName.length === 0) firstNameError = "First Name is required"
     if (!lastName || lastName.length === 0) lastNameError = "Last Name is required"
-    // TODO check pattern
     if (!email || email.length === 0) emailError = "Email is required"
+    if (!validateEmail(email) || !validateDomain(email, "mes.ac.in")) emailError = "Invalid email"
     if (!phoneNumber || phoneNumber.length === 0) phoneNumberError = "Phone number is required"
+    if (!validatePhoneNumber(phoneNumber)) phoneNumberError = "Invalid phone number"
 
     // Return false if any error exists, to stop form from sending data
     if (employeeIdError || firstNameError || lastNameError || emailError || phoneNumberError) {

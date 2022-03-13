@@ -10,7 +10,7 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import SchoolIcon from '@mui/icons-material/School';
 
 // Pages
-import ManageAcademicSession from "./ManageAcademicSession"
+// import ManageAcademicSession from "./ManageAcademicSession"
 import ManageBranch from "./ManageBranch"
 import ManageCourse from "./ManageCourse"
 import ManageFaculty from "./ManageFaculty"
@@ -28,10 +28,6 @@ export default function ExamCellDashboard() {
   return <Box sx={{ display: 'flex' }}>
     <Sidebar itemList={[
       {
-        text: "Academic Session",
-        icon: <ScheduleIcon />,
-        to: '/dashboard/academic-session'
-      }, {
         text: "Branch",
         icon: <MergeTypeIcon />,
         to: '/dashboard/branch'
@@ -52,15 +48,20 @@ export default function ExamCellDashboard() {
         icon: <LogoutIcon />,
         to: '',
         onClick: e => dispatch(logout())
-      }
+      },
+      // {
+      //   text: "Academic Session",
+      //   icon: <ScheduleIcon />,
+      //   to: '/dashboard/academic-session'
+      // }
     ]} avatar={user.picture} name={[user.firstName, user.lastName].join(" ")} role={"Exam Cell"} />
     <Box
       component="main"
       sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, p: 3 }}
     >
       <Routes>
-        <Route path="/" element={<ManageAcademicSession />} />
-        <Route path="/academic-session" element={<ManageAcademicSession />} />
+        <Route path="/" element={<ManageBranch />} />
+        {/* <Route path="/academic-session" element={<ManageAcademicSession />} /> */}
         <Route path="/branch" element={<ManageBranch />} />
         <Route path="/course" element={<ManageCourse />} />
         <Route path="/faculty" element={<ManageFaculty />} />
