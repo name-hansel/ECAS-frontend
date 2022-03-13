@@ -131,6 +131,7 @@ const AddEditBranch = ({
     }
   }
 
+  // Function to handle onSubmit form to edit branch
   const editBranch = async (e) => {
     try {
       e.preventDefault();
@@ -160,7 +161,6 @@ const AddEditBranch = ({
       }
     }
   }
-
 
   return (
     loading ? <></> : <Dialog open={open} onClose={setDialogClose}>

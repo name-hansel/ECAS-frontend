@@ -55,7 +55,6 @@ export default function ExamCellDashboard() {
     >
       <Routes>
         <Route path="/" element={<ManageBranch />} />
-        {/* <Route path="/academic-session" element={<ManageAcademicSession />} /> */}
         <Route path="/branch" element={<ManageBranch />} />
         <Route path="/course" element={<ManageCourse />} />
         <Route path="/faculty" element={<ManageFaculty />} />

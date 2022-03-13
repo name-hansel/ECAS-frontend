@@ -19,6 +19,7 @@ import Typography from '@mui/material/Typography'
 
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
+
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import ArchiveIcon from '@mui/icons-material/Archive'
@@ -102,7 +103,7 @@ const ManageBranch = () => {
     setOpen(true);
   }
 
-  // Async function to get exam cell member data 
+  // Async function to get branch data 
   const getBranches = async () => {
     const { data } = await api.get("/exam_cell/branch/");
     return data;
