@@ -145,7 +145,7 @@ const ManageBranch = () => {
             loading ? <CircularProgress /> :
               <>
                 <Button
-                  variant="contained"
+                  variant="outlined"
                   startIcon={<AddIcon />}
                   sx={{ flexGrow: 0, marginTop: 2, alignSelf: 'flex-end' }}
                   onClick={() => setOpen(true)}>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from "react-router-dom"
 
 import api from "../../utils/api"
 
@@ -7,6 +8,9 @@ import NoticeCard from '../../components/NoticeCard'
 
 // MUI components
 import { Box, CircularProgress } from "@mui/material"
+import Button from '@mui/material/Button'
+
+import AddIcon from '@mui/icons-material/Add';
 
 const Home = () => {
   // Reducer for notices
@@ -57,14 +61,16 @@ const Home = () => {
 
   return <>
     <DashboardHeader heading={'Home'} backgroundColor={'#88AAD3'} />
-    {/* TODO editor here */}
+    {/* Button to add new notice, search, filter */}
+    <Box sx={{ marginTop: 2, display: 'flex', flexDirection: 'row-reverse' }}>
+      <Button component={Link} to={'./notice/add'} variant="outlined" startIcon={<AddIcon />}>Add new notice</Button>
+    </Box>
     <Box sx={{ marginTop: 2 }}>
       {
-        loading ? <CircularProgress /> : state.map(({ title, description, semester, branch }) => <NoticeCard
-          title={title}
-          description={description}
-          semester={semester}
-          branch={branch}
+        loading ? <CircularProgress /> : state.map((notice) => <NoticeCard
+          notice={notice}
+          dispatch={dispatch}
+          key={notice._id}
         />)
       }
     </Box>

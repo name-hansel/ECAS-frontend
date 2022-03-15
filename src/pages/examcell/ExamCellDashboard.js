@@ -15,6 +15,7 @@ import ManageBranch from "./ManageBranch"
 import ManageCourse from "./ManageCourse"
 import ManageFaculty from "./ManageFaculty"
 import ManageStudent from "./ManageStudent"
+import AddNotice from "./AddNotice";
 
 // Components
 import Sidebar from "../../components/Sidebar";
@@ -59,6 +60,7 @@ export default function ExamCellDashboard() {
     >
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/notice/add" element={<AddNotice />} />
         <Route path="/branch" element={<ManageBranch />} />
         <Route path="/course" element={<ManageCourse />} />
         <Route path="/faculty" element={<ManageFaculty />} />
