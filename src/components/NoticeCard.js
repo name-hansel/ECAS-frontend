@@ -17,7 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const NoticeCard = ({ notice, dispatch }) => {
   // Get notice details
-  const { _id, title, description, branch, semester, createdAt, updatedAt, attachments
+  const { _id, title, description, branch, year, createdAt, updatedAt, attachments
   } = notice;
 
   // State to store open status of delete dialog
@@ -67,7 +67,7 @@ const NoticeCard = ({ notice, dispatch }) => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', paddingTop: 1 }}>
         <Box>
           <Typography>
-            {`For Semesters: ${semester.length > 0 ? semester.join(', ') : 'All'}`}
+            {`For Years: ${year.length > 0 ? year.join(', ') : 'All'}`}
           </Typography>
           <Typography>
             {
