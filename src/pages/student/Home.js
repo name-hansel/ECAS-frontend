@@ -33,7 +33,7 @@ const Home = () => {
   }, [])
 
   return <>
-    <DashboardHeader heading={'Home'} backgroundColor={'#88AAD3'} />
+    <DashboardHeader heading={'Home'} backgroundColor={'#006400'} />
     <Box sx={{ marginTop: 2 }}>
       {
         loading ? <CircularProgress /> : (
