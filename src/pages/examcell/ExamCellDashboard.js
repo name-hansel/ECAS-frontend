@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Box } from "@mui/material"
 import { Routes, Route } from "react-router-dom";
 
+// Icons
 import LogoutIcon from '@mui/icons-material/Logout';
 import MergeTypeIcon from '@mui/icons-material/MergeType';
 import ClassIcon from '@mui/icons-material/Class';

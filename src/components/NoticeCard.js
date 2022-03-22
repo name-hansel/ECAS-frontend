@@ -46,7 +46,7 @@ const NoticeCard = ({ notice, dispatch }) => {
       {
         description && description.length > 0 ? <>
           <Box sx={{ paddingTop: 2, paddingBottom: 2 }}>
-            <Typography variant="body1">
+            <Typography variant="body1" align="justify">
               {description}
             </Typography>
           </Box>

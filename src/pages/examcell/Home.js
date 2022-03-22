@@ -9,6 +9,7 @@ import NoticeCard from '../../components/NoticeCard'
 // MUI components
 import { Box, CircularProgress } from "@mui/material"
 import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
 
 import AddIcon from '@mui/icons-material/Add';
 
@@ -63,15 +64,17 @@ const Home = () => {
     <DashboardHeader heading={'Home'} backgroundColor={'#88AAD3'} />
     {/* Button to add new notice, search, filter */}
     <Box sx={{ marginTop: 2, display: 'flex', flexDirection: 'row-reverse' }}>
-      <Button component={Link} to={'./notice/add'} variant="outlined" startIcon={<AddIcon />}>Add new notice</Button>
+      <Button component={Link} to={'./notice/add'} variant="outlined" startIcon={<AddIcon />}>Add new announcement</Button>
     </Box>
     <Box sx={{ marginTop: 2 }}>
       {
-        loading ? <CircularProgress /> : state.map((notice) => <NoticeCard
-          notice={notice}
-          dispatch={dispatch}
-          key={notice._id}
-        />)
+        loading ? <CircularProgress /> : (
+          state.length === 0 ? <Typography variant='subtitle2' sx={{ margin: '0 auto', marginTop: 2 }}>No announcements found.</Typography> : state.map((notice) => <NoticeCard
+            notice={notice}
+            dispatch={dispatch}
+            key={notice._id}
+          />)
+        )
       }
     </Box>
   </>
