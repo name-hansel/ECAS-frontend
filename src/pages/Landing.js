@@ -66,7 +66,7 @@ export default function Landing() {
   >
     <Header />
     <Typography variant="h5" style={{ textAlign: 'center' }}>
-      Login with MES account as...
+      Login with MES account as
     </Typography>
     {/* Box containing icons and labels */}
     <Box sx={{ display: 'flex', justifyContent: 'space-evenly', margin: '8% 10%' }}>
