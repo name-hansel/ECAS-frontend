@@ -18,6 +18,7 @@ const AttachmentItems = ({ fileName }) => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        maxWidth: '300px'
       }}>
       <div style={{ width: '50px' }}>
         <FileIcon extension={extension} {...defaultStyles[extension]} />

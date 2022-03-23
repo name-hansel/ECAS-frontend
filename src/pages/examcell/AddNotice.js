@@ -23,6 +23,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import FormHelperText from '@mui/material/FormHelperText';
 
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import HomeIcon from '@mui/icons-material/Home';
@@ -59,9 +60,6 @@ const AddNotice = () => {
     sendNotification: 'yes'
   })
 
-  // TODO add checkbox for all branches and years
-  // TODO Do not allow empty branch or year
-
   // Branch data
   const [branches, setBranches] = React.useState([]);
 
@@ -85,6 +83,13 @@ const AddNotice = () => {
       checked: false
     }
   ]);
+
+  // Form errors state
+  const [formErrors, setFormErrors] = React.useState({
+    titleError: '',
+    branchError: '',
+    yearError: ''
+  })
 
   // Ref to save state for clean up function
   const stateRef = React.useRef();
@@ -174,12 +179,30 @@ const AddNotice = () => {
     const { name, value } = e.target;
     setNotice({ ...notice, [name]: value })
     // If the value of a field is changed, clear any errors associated with it
-    // setFormErrors({ ...formErrors, [`${name}Error`]: "" })
+    setFormErrors({ ...formErrors, [`${name}Error`]: "" })
   }
 
+  const noticeValidation = (title, branch, year) => {
+    // if (formErrors.titleError || formErrors.branchError || formErrors.yearError)
+    //   return false
+
+    let titleError = '', branchError = '', yearError = '';
+    if (!title || title.length === 0) titleError = 'Title is required';
+    if (branch.length === 0) branchError = 'Select at least one branch';
+    if (year.length === 0) yearError = 'Select at least one year';
+
+    // Return false if any error exists, to stop form from sending data
+    if (titleError || branchError || yearError) {
+      setFormErrors({ ...formErrors, titleError, branchError, yearError })
+      return false;
+    }
+
+    return true;
+  }
+
+  // Handle on submit of form
   const onSubmit = async (e) => {
     try {
-      // TODO validation
       e.preventDefault();
       const noticeData = {
         title: notice.title,
@@ -191,6 +214,9 @@ const AddNotice = () => {
       // Get array of years (1,2,3,4)
       const yearData = years.filter(year => year.checked).map(year => year.value);
       const fileData = state.map(file => file.awsFileName);
+
+      if (!noticeValidation(noticeData.title, branchData, yearData))
+        return;
 
       await api.post("/exam_cell/notice", {
         ...noticeData,
@@ -212,6 +238,7 @@ const AddNotice = () => {
 
   // Handle branch checkbox change
   const handleChange = (e) => {
+    setFormErrors({ ...formErrors, branchError: "" })
     // Change checked to e.target.checked when _id === e.target.name
     const updatedBranches = branches.map(branch => {
       if (branch._id !== e.target.name) return branch;
@@ -222,9 +249,32 @@ const AddNotice = () => {
 
   // Handle year checkbox change
   const handleYearChange = (e) => {
+    setFormErrors({ ...formErrors, yearError: "" })
     const updatedYears = years.map(year => {
       if (year.value !== Number(e.target.name)) return year;
       else return { ...year, checked: e.target.checked }
+    })
+    setYears([...updatedYears])
+  }
+
+  // Handle function for 'ALL' branches checkbox
+  const setForAllBranches = (e) => {
+    setFormErrors({ ...formErrors, branchError: "" })
+    const updatedBranches = branches.map(branch => {
+      return {
+        ...branch, checked: e.target.checked
+      }
+    })
+    setBranches([...updatedBranches])
+  }
+
+  // Handle function for 'ALL' years checkbox
+  const setForAllYears = (e) => {
+    setFormErrors({ ...formErrors, yearError: "" })
+    const updatedYears = years.map(year => {
+      return {
+        ...year, checked: e.target.checked
+      }
     })
     setYears([...updatedYears])
   }
@@ -244,7 +294,10 @@ const AddNotice = () => {
             value={notice.title}
             onChange={handleFormChange}
             name="title"
-            fullWidth />
+            fullWidth
+            error={formErrors.titleError ? true : false}
+            helperText={formErrors.titleError}
+          />
         </Box>
         {/* For description */}
         {/* <Editor /> */}
@@ -263,8 +316,14 @@ const AddNotice = () => {
           {/* Branch */}
           <div>
             <Typography variant="h6">Branch</Typography>
-            <FormControl component="fieldset" variant="standard">
+            <FormControl component="fieldset" variant="standard" error={formErrors.branchError ? true : false}>
               <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox checked={branches.map(branch => branch.checked).every(Boolean)} onChange={setForAllBranches} name={'all'} key={'all'} />
+                  }
+                  label={'All'}
+                />
                 {
                   branches.map(branch => <FormControlLabel
                     control={
@@ -274,13 +333,20 @@ const AddNotice = () => {
                   />)
                 }
               </FormGroup>
+              <FormHelperText>{formErrors.branchError}</FormHelperText>
             </FormControl>
           </div>
           {/* Year */}
           <div>
             <Typography variant="h6">Year</Typography>
-            <FormControl component="fieldset" variant="standard">
+            <FormControl component="fieldset" variant="standard" error={formErrors.yearError ? true : false}>
               <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox checked={years.map(year => year.checked).every(Boolean)} onChange={setForAllYears} name={'all'} key={'all'} />
+                  }
+                  label={'All'}
+                />
                 {
                   years.map(year => <FormControlLabel
                     control={
@@ -290,6 +356,7 @@ const AddNotice = () => {
                   />)
                 }
               </FormGroup>
+              <FormHelperText>{formErrors.yearError}</FormHelperText>
             </FormControl>
           </div>
           {/* Send notification */}
@@ -330,7 +397,10 @@ const AddNotice = () => {
             state.length > 0 ? state.map(file => <UploadAttachmentItems key={file.awsFileName} awsFileName={file.awsFileName} dispatch={dispatch} removeFile={removeFile} />) : <Typography variant="subtitle1" sx={{ margin: '0 auto', color: 'gray' }}>No files uploaded.</Typography>
           }
         </Box>
-        <Button variant="outlined" type="submit">Add announcement</Button>
+        <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
+          <Button variant="outlined" type="submit">Add announcement</Button>
+          <Button sx={{ marginRight: 1 }} variant="outlined" onClick={() => navigate("/dashboard")}>Cancel</Button>
+        </Box>
       </form>
     </Box>
   </>
