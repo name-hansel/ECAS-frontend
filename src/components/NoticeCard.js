@@ -67,7 +67,7 @@ const NoticeCard = ({ notice, dispatch }) => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', paddingTop: 1 }}>
         <Box>
           <Typography>
-            {`For Years: ${year.length > 0 ? year.join(', ') : 'All'}`}
+            {`For Year: ${year.length > 0 ? year.join(', ') : 'All'}`}
           </Typography>
           <Typography>
             {

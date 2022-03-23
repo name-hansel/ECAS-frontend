@@ -69,7 +69,7 @@ const Home = () => {
     <Box sx={{ marginTop: 2 }}>
       {
         loading ? <CircularProgress /> : (
-          state.length === 0 ? <Typography variant='subtitle2' sx={{ margin: '0 auto', marginTop: 2 }}>No announcements found.</Typography> : state.map((notice) => <NoticeCard
+          state.length === 0 ? <Typography variant="subtitle1" sx={{ margin: '0 auto', color: 'gray' }}>No announcements found.</Typography> : state.map((notice) => <NoticeCard
             notice={notice}
             dispatch={dispatch}
             key={notice._id}

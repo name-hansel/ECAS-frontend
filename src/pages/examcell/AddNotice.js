@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux';
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 import api from "../../utils/api"
 import { setSnackbar } from '../../redux/snackbar/snackbar.action'
@@ -33,6 +33,7 @@ const Input = styled('input')({
 
 const AddNotice = () => {
   const reduxDispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Reducer for files
   function reducer(state, action) {
@@ -55,10 +56,35 @@ const AddNotice = () => {
   const [notice, setNotice] = React.useState({
     title: '',
     description: '',
-    branch: [],
-    year: [],
     sendNotification: 'yes'
   })
+
+  // TODO add checkbox for all branches and years
+  // TODO Do not allow empty branch or year
+
+  // Branch data
+  const [branches, setBranches] = React.useState([]);
+
+  // Year data
+  const [years, setYears] = React.useState([
+    {
+      name: 'First Year',
+      value: 1,
+      checked: false
+    }, {
+      name: 'Second Year',
+      value: 2,
+      checked: false
+    }, {
+      name: 'Third Year',
+      value: 3,
+      checked: false
+    }, {
+      name: 'Final Year',
+      value: 4,
+      checked: false
+    }
+  ]);
 
   // Ref to save state for clean up function
   const stateRef = React.useRef();
@@ -68,7 +94,6 @@ const AddNotice = () => {
   }, [state])
 
   // Cleanup function to delete uploaded files when user moves away from add announcement page
-  // ! TODO CLEAR STATE AFTER ADDING NOTICE.
   React.useEffect(() => {
     return async () => {
       if (stateRef.current.length === 0) return;
@@ -126,9 +151,6 @@ const AddNotice = () => {
     })
   }
 
-  // Branch data
-  const [branches, setBranches] = React.useState([]);
-
   const getBranchData = async () => {
     const { data } = await api.get(`/exam_cell/branch`);
     return data.active;
@@ -139,7 +161,9 @@ const AddNotice = () => {
     let mounted = true;
     getBranchData().then(data => {
       if (mounted) {
-        setBranches([...data]);
+        setBranches([...data.map(branch => {
+          return { ...branch, checked: false }
+        })]);
       }
     })
     return () => mounted = false;
@@ -153,28 +177,56 @@ const AddNotice = () => {
     // setFormErrors({ ...formErrors, [`${name}Error`]: "" })
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     try {
+      // TODO validation
       e.preventDefault();
+      const noticeData = {
+        title: notice.title,
+        description: notice.description,
+        sendNotification: notice.sendNotification === 'yes' ? true : false
+      }
+      // Get array of branch ids
+      const branchData = branches.filter(branch => branch.checked).map(branch => branch._id);
+      // Get array of years (1,2,3,4)
+      const yearData = years.filter(year => year.checked).map(year => year.value);
+      const fileData = state.map(file => file.awsFileName);
+
+      await api.post("/exam_cell/notice", {
+        ...noticeData,
+        branch: branchData,
+        year: yearData,
+        files: fileData
+      })
+
       // Set state to empty array
       dispatch({
         type: 'CLEAR_FILES'
       })
+      // Redirect to dashboard
+      navigate("/dashboard")
     } catch (err) {
       reduxDispatch(setSnackbar(true, "error", err.response.data.error))
     }
   }
 
-  const getChecked = (_id) => {
-    return notice.branch.indexOf(_id) === -1 ? false : true;
+  // Handle branch checkbox change
+  const handleChange = (e) => {
+    // Change checked to e.target.checked when _id === e.target.name
+    const updatedBranches = branches.map(branch => {
+      if (branch._id !== e.target.name) return branch;
+      else return { ...branch, checked: e.target.checked }
+    })
+    setBranches([...updatedBranches]);
   }
 
-  const handleChange = (e) => {
-    // TODO remove entry from notice.branch when unchecked
-    setNotice({
-      ...notice,
-      branch: [...notice.branch, e.target.name]
+  // Handle year checkbox change
+  const handleYearChange = (e) => {
+    const updatedYears = years.map(year => {
+      if (year.value !== Number(e.target.name)) return year;
+      else return { ...year, checked: e.target.checked }
     })
+    setYears([...updatedYears])
   }
 
   return <>
@@ -208,14 +260,15 @@ const AddNotice = () => {
             fullWidth />
         </Box>
         <Box sx={{ marginBottom: 1, marginTop: 2, display: 'flex', justifyContent: 'space-between' }}>
+          {/* Branch */}
           <div>
             <Typography variant="h6">Branch</Typography>
-            <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
+            <FormControl component="fieldset" variant="standard">
               <FormGroup>
                 {
                   branches.map(branch => <FormControlLabel
                     control={
-                      <Checkbox checked={getChecked(branch._id)} onChange={handleChange} name={branch._id} key={branch._id} />
+                      <Checkbox checked={branch.checked} onChange={handleChange} name={branch._id} key={branch._id} />
                     }
                     label={branch.name}
                   />)
@@ -223,12 +276,26 @@ const AddNotice = () => {
               </FormGroup>
             </FormControl>
           </div>
+          {/* Year */}
           <div>
             <Typography variant="h6">Year</Typography>
+            <FormControl component="fieldset" variant="standard">
+              <FormGroup>
+                {
+                  years.map(year => <FormControlLabel
+                    control={
+                      <Checkbox checked={year.checked} onChange={handleYearChange} name={String(year.value)} key={year.value} />
+                    }
+                    label={year.name}
+                  />)
+                }
+              </FormGroup>
+            </FormControl>
           </div>
+          {/* Send notification */}
           <div>
             <FormControl>
-              <FormLabel id="demo-controlled-radio-buttons-group">
+              <FormLabel>
                 <Typography variant="h6">Send email notification?</Typography>
               </FormLabel>
               <RadioGroup
@@ -245,25 +312,26 @@ const AddNotice = () => {
             </FormControl>
           </div>
         </Box>
-      </form>
-      {/* File upload */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: 1, marginTop: 2 }}>
-        <Typography variant="h6">Attachments</Typography>
-        <label htmlFor="contained-button-file">
-          <Input id="contained-button-file" type="file" accept=".json,.csv,.txt,.text,application/json,text/csv,text/plain,application/pdf,.png,.jpg" onChange={e => onFileChange(e)} />
-          <Button variant="contained" component="span" startIcon={<FileUploadIcon />}>
-            Upload attachments
-          </Button>
-        </label>
-      </Box>
-      <Divider />
-      {/* Attachments */}
-      <Box sx={{ paddingTop: 2, display: 'flex', paddingBottom: 2 }}>
+        {/* File upload */}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: 1, marginTop: 2 }}>
+          <Typography variant="h6">Attachments</Typography>
+          <label htmlFor="contained-button-file">
+            <Input id="contained-button-file" type="file" accept=".json,.csv,.txt,.text,application/json,text/csv,text/plain,application/pdf,.png,.jpg" onChange={e => onFileChange(e)} />
+            <Button variant="contained" component="span" startIcon={<FileUploadIcon />}>
+              Upload attachments
+            </Button>
+          </label>
+        </Box>
+        <Divider />
         {/* Attachments */}
-        {
-          state.length > 0 ? state.map(file => <UploadAttachmentItems key={file.awsFileName} awsFileName={file.awsFileName} dispatch={dispatch} removeFile={removeFile} />) : <Typography variant="subtitle1" sx={{ margin: '0 auto', color: 'gray' }}>No files uploaded.</Typography>
-        }
-      </Box>
+        <Box sx={{ paddingTop: 2, display: 'flex', paddingBottom: 2 }}>
+          {/* Attachments */}
+          {
+            state.length > 0 ? state.map(file => <UploadAttachmentItems key={file.awsFileName} awsFileName={file.awsFileName} dispatch={dispatch} removeFile={removeFile} />) : <Typography variant="subtitle1" sx={{ margin: '0 auto', color: 'gray' }}>No files uploaded.</Typography>
+          }
+        </Box>
+        <Button variant="outlined" type="submit">Add announcement</Button>
+      </form>
     </Box>
   </>
 }
