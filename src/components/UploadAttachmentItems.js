@@ -15,7 +15,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const UploadAttachmentItems = ({ awsFileName, dispatch, removeFile }) => {
-  const extension = awsFileName.split(".")[2];
+  const extension = awsFileName.split(".").pop();
 
   return <StyledBadge badgeContent={<CloseIcon style={{ cursor: 'pointer' }} fontSize={"16px"} onClick={() => removeFile(awsFileName)} />} color="primary">
     <Paper

@@ -6,13 +6,13 @@ import api from "../../utils/api"
 import { setSnackbar } from '../../redux/snackbar/snackbar.action'
 
 import DashboardHeader from '../../components/DashboardHeader'
-// import Editor from "../../components/Editor"
 import UploadAttachmentItems from '../../components/UploadAttachmentItems';
 
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 
@@ -53,11 +53,14 @@ const AddNotice = () => {
   // Store files
   const [state, dispatch] = React.useReducer(reducer, []);
 
+  // State to track if files are uploading
+  const [fileUploading, setFileUploading] = React.useState(false);
+
   // Notice state
   const [notice, setNotice] = React.useState({
     title: '',
     description: '',
-    sendNotification: 'yes'
+    sendNotification: 'yes',
   })
 
   // Branch data
@@ -132,28 +135,56 @@ const AddNotice = () => {
 
   // Function to delete file 
   const removeFile = async (awsFileName) => {
-    await api.delete(`/exam_cell/notice/document/${awsFileName}`);
-    dispatch({
-      type: 'REMOVE_FILE',
-      payload: awsFileName
-    })
+    try {
+      await api.delete(`/exam_cell/notice/document/${awsFileName}`);
+      dispatch({
+        type: 'REMOVE_FILE',
+        payload: awsFileName
+      })
+    } catch (err) {
+      if (err.response) {
+        if (Array.isArray(err.response.data.error)) {
+          const errors = {};
+          err.response.data.error.forEach(({ param, msg }) => {
+            errors[`${param}Error`] = msg;
+          })
+          setFormErrors({ ...formErrors, ...errors })
+        } else {
+          reduxDispatch(setSnackbar(true, "error", err.response.data.error))
+        }
+      }
+    }
   }
 
   const onFileChange = async (e) => {
-    // Extract file from FileList
-    const fileToBeUploaded = e.target.files.item(0);
-
-    // Upload newly added file
-    const fileName = await uploadFile(fileToBeUploaded);
-
-    // Add property of AWS filename to uploaded file
-    fileToBeUploaded['awsFileName'] = fileName;
-
-    // Add files to state
-    dispatch({
-      type: 'ADD_FILE',
-      payload: fileToBeUploaded
-    })
+    try {
+      // Extract file from FileList
+      const fileToBeUploaded = e.target.files.item(0);
+      setFileUploading(true);
+      // Upload newly added file
+      const fileName = await uploadFile(fileToBeUploaded);
+      // Add property of AWS filename to uploaded file
+      fileToBeUploaded['awsFileName'] = fileName;
+      // Add files to state
+      dispatch({
+        type: 'ADD_FILE',
+        payload: fileToBeUploaded
+      })
+      setFileUploading(false);
+    } catch (err) {
+      setFileUploading(false);
+      if (err.response) {
+        if (Array.isArray(err.response.data.error)) {
+          const errors = {};
+          err.response.data.error.forEach(({ param, msg }) => {
+            errors[`${param}Error`] = msg;
+          })
+          setFormErrors({ ...formErrors, ...errors })
+        } else {
+          reduxDispatch(setSnackbar(true, "error", err.response.data.error))
+        }
+      }
+    }
   }
 
   const getBranchData = async () => {
@@ -183,9 +214,6 @@ const AddNotice = () => {
   }
 
   const noticeValidation = (title, branch, year) => {
-    // if (formErrors.titleError || formErrors.branchError || formErrors.yearError)
-    //   return false
-
     let titleError = '', branchError = '', yearError = '';
     if (!title || title.length === 0) titleError = 'Title is required';
     if (branch.length === 0) branchError = 'Select at least one branch';
@@ -209,9 +237,10 @@ const AddNotice = () => {
         description: notice.description,
         sendNotification: notice.sendNotification === 'yes' ? true : false
       }
+
       // Get array of branch ids
       const branchData = branches.filter(branch => branch.checked).map(branch => branch._id);
-      // Get array of years (1,2,3,4)
+      // Get array of years
       const yearData = years.filter(year => year.checked).map(year => year.value);
       const fileData = state.map(file => file.awsFileName);
 
@@ -228,11 +257,11 @@ const AddNotice = () => {
       // Set state to empty array
       dispatch({
         type: 'CLEAR_FILES'
-      })
+      });
       // Redirect to dashboard
-      navigate("/dashboard")
+      navigate("/dashboard");
     } catch (err) {
-      reduxDispatch(setSnackbar(true, "error", err.response.data.error))
+      reduxDispatch(setSnackbar(true, "error", err.response.data.error));
     }
   }
 
@@ -313,29 +342,6 @@ const AddNotice = () => {
             fullWidth />
         </Box>
         <Box sx={{ marginBottom: 1, marginTop: 2, display: 'flex', justifyContent: 'space-between' }}>
-          {/* Branch */}
-          <div>
-            <Typography variant="h6">Branch</Typography>
-            <FormControl component="fieldset" variant="standard" error={formErrors.branchError ? true : false}>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Checkbox checked={branches.map(branch => branch.checked).every(Boolean)} onChange={setForAllBranches} name={'all'} key={'all'} />
-                  }
-                  label={'All'}
-                />
-                {
-                  branches.map(branch => <FormControlLabel
-                    control={
-                      <Checkbox checked={branch.checked} onChange={handleChange} name={branch._id} key={branch._id} />
-                    }
-                    label={branch.name}
-                  />)
-                }
-              </FormGroup>
-              <FormHelperText>{formErrors.branchError}</FormHelperText>
-            </FormControl>
-          </div>
           {/* Year */}
           <div>
             <Typography variant="h6">Year</Typography>
@@ -357,6 +363,29 @@ const AddNotice = () => {
                 }
               </FormGroup>
               <FormHelperText>{formErrors.yearError}</FormHelperText>
+            </FormControl>
+          </div>
+          {/* Branch */}
+          <div>
+            <Typography variant="h6">Branch</Typography>
+            <FormControl component="fieldset" variant="standard" error={formErrors.branchError ? true : false}>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox checked={branches.map(branch => branch.checked).every(Boolean)} onChange={setForAllBranches} name={'all'} key={'all'} />
+                  }
+                  label={'All'}
+                />
+                {
+                  branches.map(branch => <FormControlLabel
+                    control={
+                      <Checkbox checked={branch.checked} onChange={handleChange} name={branch._id} key={branch._id} />
+                    }
+                    label={branch.name}
+                  />)
+                }
+              </FormGroup>
+              <FormHelperText>{formErrors.branchError}</FormHelperText>
             </FormControl>
           </div>
           {/* Send notification */}
@@ -384,21 +413,22 @@ const AddNotice = () => {
           <Typography variant="h6">Attachments</Typography>
           <label htmlFor="contained-button-file">
             <Input id="contained-button-file" type="file" accept=".json,.csv,.txt,.text,application/json,text/csv,text/plain,application/pdf,.png,.jpg" onChange={e => onFileChange(e)} />
-            <Button variant="contained" component="span" startIcon={<FileUploadIcon />}>
+            <LoadingButton loading={fileUploading} variant="outlined" component="span" startIcon={<FileUploadIcon />}>
               Upload attachments
-            </Button>
+            </LoadingButton >
           </label>
         </Box>
         <Divider />
         {/* Attachments */}
-        <Box sx={{ paddingTop: 2, display: 'flex', paddingBottom: 2 }}>
+        <Box sx={{ paddingTop: 2, display: 'flex', paddingBottom: 2, flexWrap: 'wrap' }}>
           {/* Attachments */}
           {
             state.length > 0 ? state.map(file => <UploadAttachmentItems key={file.awsFileName} awsFileName={file.awsFileName} dispatch={dispatch} removeFile={removeFile} />) : <Typography variant="subtitle1" sx={{ margin: '0 auto', color: 'gray' }}>No files uploaded.</Typography>
           }
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
-          <Button variant="outlined" type="submit">Add announcement</Button>
+        <Divider />
+        <Box sx={{ display: 'flex', flexDirection: 'row-reverse', marginTop: 1 }}>
+          <Button variant="contained" type="submit">Add announcement</Button>
           <Button sx={{ marginRight: 1 }} variant="outlined" onClick={() => navigate("/dashboard")}>Cancel</Button>
         </Box>
       </form>
