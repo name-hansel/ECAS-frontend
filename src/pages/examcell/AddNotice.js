@@ -2,8 +2,11 @@ import React from 'react'
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom"
 
+// import RichTextEditor from "../../components/Editor"
+
 import api from "../../utils/api"
 import { setSnackbar } from '../../redux/snackbar/snackbar.action'
+import { getTimeAfterMinutes } from "../../utils/format"
 
 import DashboardHeader from '../../components/DashboardHeader'
 import UploadAttachmentItems from '../../components/UploadAttachmentItems';
@@ -15,6 +18,7 @@ import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
+import Input from '@mui/material/Input';
 
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
@@ -28,7 +32,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import HomeIcon from '@mui/icons-material/Home';
 
-const Input = styled('input')({
+const FileInput = styled('input')({
   display: 'none',
 });
 
@@ -61,6 +65,7 @@ const AddNotice = () => {
     title: '',
     description: '',
     sendNotification: 'yes',
+    sendEmailIn: 0
   })
 
   // Branch data
@@ -91,7 +96,8 @@ const AddNotice = () => {
   const [formErrors, setFormErrors] = React.useState({
     titleError: '',
     branchError: '',
-    yearError: ''
+    yearError: '',
+    sendEmailInError: ''
   })
 
   // Ref to save state for clean up function
@@ -213,18 +219,18 @@ const AddNotice = () => {
     setFormErrors({ ...formErrors, [`${name}Error`]: "" })
   }
 
-  const noticeValidation = (title, branch, year) => {
-    let titleError = '', branchError = '', yearError = '';
+  const noticeValidation = (title, branch, year, sendEmailIn) => {
+    let titleError = '', branchError = '', yearError = '', sendEmailInError = '';
     if (!title || title.length === 0) titleError = 'Title is required';
     if (branch.length === 0) branchError = 'Select at least one branch';
     if (year.length === 0) yearError = 'Select at least one year';
+    if (sendEmailIn === '' || sendEmailIn < 0 || sendEmailIn > 120) sendEmailInError = 'Invalid input (in minutes)';
 
     // Return false if any error exists, to stop form from sending data
-    if (titleError || branchError || yearError) {
-      setFormErrors({ ...formErrors, titleError, branchError, yearError })
+    if (titleError || branchError || yearError || sendEmailInError) {
+      setFormErrors({ ...formErrors, titleError, branchError, yearError, sendEmailInError })
       return false;
     }
-
     return true;
   }
 
@@ -238,13 +244,15 @@ const AddNotice = () => {
         sendNotification: notice.sendNotification === 'yes' ? true : false
       }
 
+      if (noticeData.sendNotification) noticeData.sendEmailIn = notice.sendEmailIn;
+
       // Get array of branch ids
       const branchData = branches.filter(branch => branch.checked).map(branch => branch._id);
       // Get array of years
       const yearData = years.filter(year => year.checked).map(year => year.value);
       const fileData = state.map(file => file.awsFileName);
 
-      if (!noticeValidation(noticeData.title, branchData, yearData))
+      if (!noticeValidation(noticeData.title, branchData, yearData, noticeData.sendEmailIn))
         return;
 
       await api.post("/exam_cell/notice", {
@@ -261,8 +269,25 @@ const AddNotice = () => {
       // Redirect to dashboard
       navigate("/dashboard");
     } catch (err) {
-      reduxDispatch(setSnackbar(true, "error", err.response.data.error));
+      if (err.response) {
+        if (Array.isArray(err.response.data.error)) {
+          const errors = {};
+          err.response.data.error.forEach(({ param, msg }) => {
+            errors[`${param}Error`] = msg;
+          })
+          setFormErrors({ ...formErrors, ...errors })
+        } else {
+          reduxDispatch(setSnackbar(true, "error", err.response.data.error))
+        }
+      }
     }
+  }
+
+  // Handle sendEmailIn change
+  const handleSendEmailInChange = (e) => {
+    if (e.target.value < 0) setNotice({ ...notice, sendEmailIn: 0 })
+    else if (e.target.value > 120) setNotice({ ...notice, sendEmailIn: 120 })
+    else setNotice({ ...notice, sendEmailIn: e.target.value })
   }
 
   // Handle branch checkbox change
@@ -324,12 +349,13 @@ const AddNotice = () => {
             onChange={handleFormChange}
             name="title"
             fullWidth
+            required
             error={formErrors.titleError ? true : false}
             helperText={formErrors.titleError}
           />
         </Box>
         {/* For description */}
-        {/* <Editor /> */}
+        {/* <RichTextEditor /> */}
         <Box sx={{ marginBottom: 1, marginTop: 2 }}>
           <Typography variant="h6">Description</Typography>
           <TextField
@@ -406,13 +432,39 @@ const AddNotice = () => {
                 </div>
               </RadioGroup>
             </FormControl>
+            {
+              notice.sendNotification === 'yes' && <div>
+                <FormHelperText id="sendEmailIn">
+                  Send emails in how many minutes from now?
+                </FormHelperText>
+                <Input
+                  id="sendEmailIn"
+                  sx={{
+                    '& .MuiFormHelperText-root': {
+                      m: 0,
+                      marginTop: 1
+                    }
+                  }}
+                  value={notice.sendEmailIn}
+                  // If minutes < 0, set to 0 as it cannot be negative
+                  onChange={handleSendEmailInChange}
+                  type={"number"}
+                  placeholder={'[0-120] minutes'}
+                />
+                <FormHelperText id="sendEmailIn" sx={{ color: 'red' }}>
+                  {formErrors.sendEmailInError}
+                </FormHelperText>
+                <Typography variant="subtitle2" sx={{ margin: '0 auto', marginTop: 1, color: 'gray' }}>{`Emails will be sent at: `}</Typography>
+                <Typography variant="subtitle1" sx={{ color: 'gray', margin: '0 auto' }}>{`${getTimeAfterMinutes(notice.sendEmailIn).join(" on ")}`}</Typography>
+              </div>
+            }
           </div>
         </Box>
         {/* File upload */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end', marginBottom: 1, marginTop: 2 }}>
           <Typography variant="h6">Attachments</Typography>
           <label htmlFor="contained-button-file">
-            <Input id="contained-button-file" type="file" accept=".json,.csv,.txt,.text,application/json,text/csv,text/plain,application/pdf,.png,.jpg" onChange={e => onFileChange(e)} />
+            <FileInput id="contained-button-file" type="file" accept=".json,.csv,.txt,.text,application/json,text/csv,text/plain,application/pdf,.png,.jpg" onChange={e => onFileChange(e)} />
             <LoadingButton loading={fileUploading} variant="outlined" component="span" startIcon={<FileUploadIcon />}>
               Upload attachments
             </LoadingButton >

@@ -30,7 +30,7 @@ const DeleteExamCell = ({ open, setOpen, name, dispatch, _id }) => {
       handleClose();
       reduxDispatch(setSnackbar(true, "success", "Deleted Exam Cell Member successfully!"))
     } catch (err) {
-      console.log(err)
+      reduxDispatch(setSnackbar(true, "error", err.response.data.error));
     }
   }
 

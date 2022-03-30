@@ -17,14 +17,21 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const NoticeCard = ({ notice, dispatch }) => {
   // Get notice details
-  const { _id, title, description, branch, year, createdAt, updatedAt, attachments
+  const { _id, title, description, branch, year, createdAt, updatedAt, attachments, sendNotification, sendEmailIn
   } = notice;
+
+  const getTimeDifferenceInMinutes = () => {
+    const timeNow = Date.parse(new Date());
+    const noticeCreatedAt = Date.parse(createdAt);
+    const differenceInMinutes = (timeNow - noticeCreatedAt) / (1000 * 60);
+    return differenceInMinutes > sendEmailIn ? 'Emails have been sent and notice is visible to students.' : 'Emails not sent yet and notice is not visible to students.'
+  }
 
   // State to store open status of delete dialog
   const [open, setOpen] = React.useState(false);
 
   return (
-    <Card variant="outlined" sx={{ p: 2, marginBottom: 3 }}>
+    <Card variant="outlined" sx={{ p: 2, paddingBottom: 1, paddingTop: 1.5, marginBottom: 3 }}>
       {/* TITLE */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h4">
@@ -56,7 +63,7 @@ const NoticeCard = ({ notice, dispatch }) => {
       {/* ATTACHMENTS */}
       {
         attachments && attachments.length > 0 ? <>
-          <Box sx={{ paddingTop: 2, display: 'flex', paddingBottom: 2 }}>
+          <Box sx={{ paddingTop: 2, display: 'flex', paddingBottom: 2, flexWrap: 'wrap' }}>
             {
               attachments.length > 0 && attachments.map(fileName => <AttachmentItems fileName={fileName} key={fileName} />)
             }
@@ -64,7 +71,7 @@ const NoticeCard = ({ notice, dispatch }) => {
           <Divider />
         </> : <></>
       }
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', paddingTop: 1 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', paddingTop: 1, paddingBottom: 1 }}>
         <Box>
           <Typography>
             {`For Year: ${year.length > 0 ? year.join(', ') : 'All'}`}
@@ -84,6 +91,13 @@ const NoticeCard = ({ notice, dispatch }) => {
           </IconButton>
         </Box>
       </Box>
+      {
+        sendNotification && <><Divider />
+          <Box sx={{ paddingTop: 1 }}>
+            <Typography variant="subtitle2" sx={{ color: 'gray' }}>{getTimeDifferenceInMinutes()}</Typography>
+          </Box>
+        </>
+      }
       <DeleteNotice open={open} setOpen={setOpen} dispatch={dispatch} _id={_id} />
     </Card>
   )

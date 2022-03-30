@@ -30,7 +30,8 @@ const DeleteNotice = ({ open, setOpen, dispatch, _id }) => {
       handleClose();
       reduxDispatch(setSnackbar(true, "success", "Deleted notice successfully!"))
     } catch (err) {
-      console.log(err)
+      reduxDispatch(setSnackbar(true, "error", err.response.data.error));
+      handleClose();
     }
   }
 
