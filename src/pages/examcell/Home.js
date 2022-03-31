@@ -5,6 +5,7 @@ import api from "../../utils/api"
 
 import DashboardHeader from "../../components/DashboardHeader"
 import NoticeCard from '../../components/NoticeCard'
+import DeleteNotice from '../../components/dialog/DeleteNotice'
 
 // MUI components
 import { Box, CircularProgress } from "@mui/material"
@@ -32,6 +33,10 @@ const Home = () => {
         throw new Error();
     }
   }
+
+  // State to store open status of delete dialog
+  const [open, setOpen] = React.useState(false);
+  const [id, setId] = React.useState('');
 
   // State containing notices already in database
   const [state, dispatch] = React.useReducer(reducer, []);
@@ -71,11 +76,14 @@ const Home = () => {
         loading ? <CircularProgress /> : (
           state.length === 0 ? <Typography variant="subtitle1" sx={{ margin: '0 auto', color: 'gray' }}>No announcements found.</Typography> : state.map((notice) => <NoticeCard
             notice={notice}
-            dispatch={dispatch}
             key={notice._id}
+            open={open}
+            setOpen={setOpen}
+            setId={setId}
           />)
         )
       }
+      <DeleteNotice open={open} setOpen={setOpen} dispatch={dispatch} _id={id} />
     </Box>
   </>
 }

@@ -1,7 +1,7 @@
 import React from 'react'
+import { useNavigate } from "react-router-dom";
 
 import AttachmentItems from './AttachmentItems';
-import DeleteNotice from './dialog/DeleteNotice';
 
 import { getFormattedTime, isSendEmailInOver } from '../utils/format'
 
@@ -15,10 +15,11 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const NoticeCard = ({ notice, dispatch }) => {
+const NoticeCard = ({ notice, setOpen, open, setId }) => {
   // Get notice details
   const { _id, title, description, branch, year, createdAt, updatedAt, attachments, sendNotification, sendEmailIn
   } = notice;
+  const navigate = useNavigate();
 
   const getTimeDifferenceInMinutes = () => {
     const timeNow = Date.parse(new Date());
@@ -27,14 +28,11 @@ const NoticeCard = ({ notice, dispatch }) => {
     return differenceInMinutes > sendEmailIn ? 'Emails have been sent and the notice is visible to students.' : 'Emails not sent yet and the notice is not visible to students.'
   }
 
-  // State to store open status of delete dialog
-  const [open, setOpen] = React.useState(false);
-
   return (
     <Card variant="outlined" sx={{ p: 2, paddingBottom: 1, paddingTop: 1.5, marginBottom: 3 }}>
       {/* TITLE */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4">
+        <Typography sx={{ cursor: 'pointer' }} variant="h4" onClick={() => navigate(`./notice/${_id}`)}>
           {title}
         </Typography>
         <Box sx={{ m: 1, textAlign: 'right' }}>
@@ -85,10 +83,15 @@ const NoticeCard = ({ notice, dispatch }) => {
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignSelf: 'center', width: '10%' }}>
           {
             (!sendNotification || !isSendEmailInOver(createdAt, sendEmailIn)) ? <>
-              <IconButton>
+              <IconButton
+              //onClick={() => navigate(`./notice/${_id}/edit`)}
+              >
                 <EditIcon />
               </IconButton>
-              <IconButton onClick={e => setOpen(true)} >
+              <IconButton onClick={e => {
+                setId(_id)
+                setOpen(true)
+              }} >
                 <DeleteIcon />
               </IconButton>
             </> : <></>
@@ -102,7 +105,6 @@ const NoticeCard = ({ notice, dispatch }) => {
           </Box>
         </>
       }
-      <DeleteNotice open={open} setOpen={setOpen} dispatch={dispatch} _id={_id} />
     </Card>
   )
 }
