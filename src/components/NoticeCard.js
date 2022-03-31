@@ -3,7 +3,7 @@ import React from 'react'
 import AttachmentItems from './AttachmentItems';
 import DeleteNotice from './dialog/DeleteNotice';
 
-import { getFormattedTime } from '../utils/format'
+import { getFormattedTime, isSendEmailInOver } from '../utils/format'
 
 // MUI components
 import Card from '@mui/material/Card';
@@ -24,7 +24,7 @@ const NoticeCard = ({ notice, dispatch }) => {
     const timeNow = Date.parse(new Date());
     const noticeCreatedAt = Date.parse(createdAt);
     const differenceInMinutes = (timeNow - noticeCreatedAt) / (1000 * 60);
-    return differenceInMinutes > sendEmailIn ? 'Emails have been sent and notice is visible to students.' : 'Emails not sent yet and notice is not visible to students.'
+    return differenceInMinutes > sendEmailIn ? 'Emails have been sent and the notice is visible to students.' : 'Emails not sent yet and the notice is not visible to students.'
   }
 
   // State to store open status of delete dialog
@@ -83,12 +83,16 @@ const NoticeCard = ({ notice, dispatch }) => {
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignSelf: 'center', width: '10%' }}>
-          <IconButton>
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={e => setOpen(true)} >
-            <DeleteIcon />
-          </IconButton>
+          {
+            (!sendNotification || !isSendEmailInOver(createdAt, sendEmailIn)) ? <>
+              <IconButton>
+                <EditIcon />
+              </IconButton>
+              <IconButton onClick={e => setOpen(true)} >
+                <DeleteIcon />
+              </IconButton>
+            </> : <></>
+          }
         </Box>
       </Box>
       {
