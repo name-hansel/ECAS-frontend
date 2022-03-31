@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from "react-router-dom";
 
 import AttachmentItems from './AttachmentItems';
 
@@ -12,14 +13,15 @@ import Box from '@mui/material/Box';
 
 const StudentNoticeCard = ({ notice }) => {
   // Get notice details
-  const { title, description, branch, year, createdAt, updatedAt, attachments
+  const { _id, title, description, branch, year, createdAt, updatedAt, attachments
   } = notice;
+  const navigate = useNavigate();
 
   return (
     <Card variant="outlined" sx={{ p: 2, marginBottom: 3 }}>
       {/* TITLE */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h4">
+        <Typography sx={{ cursor: 'pointer' }} variant="h4" onClick={() => navigate(`./notice/${_id}`)}>
           {title}
         </Typography>
         <Box sx={{ m: 1, textAlign: 'right' }}>

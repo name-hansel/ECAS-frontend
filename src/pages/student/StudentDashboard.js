@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 
 // Pages
 import Home from "./Home"
+import ViewNotice from './ViewNotice';
 
 // Components
 import Sidebar from "../../components/Sidebar";
@@ -38,6 +39,7 @@ const StudentDashboard = () => {
     >
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/notice/:_id" element={<ViewNotice />} />
       </Routes>
     </Box>
   </Box>
