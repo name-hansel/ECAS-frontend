@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link } from "react-router-dom"
+import { useDispatch } from 'react-redux';
 
 import api from "../../utils/api"
+import { setSnackbar } from '../../redux/snackbar/snackbar.action';
 
 import DashboardHeader from "../../components/DashboardHeader"
 import NoticeCard from '../../components/NoticeCard'
@@ -15,6 +17,7 @@ import Typography from '@mui/material/Typography'
 import AddIcon from '@mui/icons-material/Add';
 
 const Home = () => {
+  const reduxDispatch = useDispatch();
   // Reducer for notices
   function reducer(state, action) {
     switch (action.type) {
@@ -46,8 +49,14 @@ const Home = () => {
 
   // Function to get all notices
   const getNotices = async () => {
-    const { data } = await api.get("/exam_cell/notice/");
-    return data;
+    try {
+      const { data } = await api.get("/exam_cell/notice/");
+      return data;
+    } catch (err) {
+      if (err.response) {
+        reduxDispatch(setSnackbar(true, "error", err.response.data.error));
+      }
+    }
   }
 
   // useEffect hook to populate state on load

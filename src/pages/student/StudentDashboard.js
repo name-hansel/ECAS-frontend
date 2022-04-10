@@ -4,13 +4,15 @@ import { Routes, Route } from "react-router-dom";
 
 // Icons
 import LogoutIcon from '@mui/icons-material/Logout';
-import HomeIcon from '@mui/icons-material/Home'
+import HomeIcon from '@mui/icons-material/Home';
+import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 
 import Box from '@mui/material/Box';
 
 // Pages
-import Home from "./Home"
+import Home from "./Home";
 import ViewNotice from './ViewNotice';
+import FAQ from './FAQ'
 
 // Components
 import Sidebar from "../../components/Sidebar";
@@ -27,6 +29,10 @@ const StudentDashboard = () => {
       icon: <HomeIcon />,
       to: '/dashboard'
     }, {
+      text: "FAQ",
+      icon: <LiveHelpIcon />,
+      to: '/dashboard/faq'
+    }, {
       text: "Logout",
       icon: <LogoutIcon />,
       to: '',
@@ -40,6 +46,7 @@ const StudentDashboard = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/notice/:_id" element={<ViewNotice />} />
+        <Route path="/faq" element={<FAQ />} />
       </Routes>
     </Box>
   </Box>

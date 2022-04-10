@@ -7,7 +7,7 @@ import Link from '@mui/material/Link';
 
 const AttachmentItems = ({ fileName }) => {
   const extension = fileName.split(".")[2]
-  return <Link href={`${process.env.REACT_APP_BASE_URL}/api/public/document/${fileName}`} underline="hover" target="_blank" rel="noreferrer">
+  return <Link href={`${process.env.REACT_APP_BASE_URL}/api/public/notice/${fileName}`} underline="hover" target="_blank" rel="noreferrer">
     <Paper
       elevation={0}
       variant="outlined" sx={{
