@@ -18,3 +18,7 @@ export const isSendEmailInOver = (createdAt, minutes) => {
   // Return false if emails have not been sent
   return differenceInMinutes > minutes;
 }
+
+export const getFormattedDate = (time) => {
+  return format(parseJSON(time), "iiii, dd MMMM yyyy")
+}

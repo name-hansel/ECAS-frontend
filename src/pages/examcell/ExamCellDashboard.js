@@ -10,6 +10,7 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import SchoolIcon from '@mui/icons-material/School';
 import HomeIcon from '@mui/icons-material/Home';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
+import ChairAltIcon from '@mui/icons-material/ChairAlt';
 
 // Pages
 import Home from "./Home"
@@ -18,9 +19,10 @@ import ManageCourse from "./ManageCourse"
 import ManageFaculty from "./ManageFaculty"
 import ManageStudent from "./ManageStudent"
 import AddNotice from "./AddNotice";
-import ViewNotice from "./ViewNotice"
+import ViewNotice from "./ViewNotice";
 // import EditNotice from "./EditNotice";
-import FAQ from "./FAQ"
+import FAQ from "./FAQ";
+import SeatingArrangement from "./SeatingArrangement"
 
 // Components
 import Sidebar from "../../components/Sidebar";
@@ -53,6 +55,10 @@ export default function ExamCellDashboard() {
       icon: <ApartmentIcon />,
       to: '/dashboard/faculty'
     }, {
+      text: "Seating Arrangement",
+      icon: <ChairAltIcon />,
+      to: "/dashboard/seating-arrangement"
+    }, {
       text: "FAQ",
       icon: <LiveHelpIcon />,
       to: '/dashboard/faq'
@@ -77,6 +83,7 @@ export default function ExamCellDashboard() {
         <Route path="/faculty" element={<ManageFaculty />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/student" element={<ManageStudent />} />
+        <Route path="/seating-arrangement" element={<SeatingArrangement />} />
       </Routes>
     </Box>
   </Box>
