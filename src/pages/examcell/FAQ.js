@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import DashboardHeader from "../../components/DashboardHeader";
 import FAQTopic from "../../components/faq/exam_cell/FAQTopic";
-import AddEditFAQTopic from "../../components/dialog/AddEditFAQTopic"
+import AddEditFAQTopic from "../../components/dialog/AddEditFAQTopic";
 
 import api from "../../utils/api";
 import { setSnackbar } from '../../redux/snackbar/snackbar.action';

@@ -74,7 +74,10 @@ const AddEditFAQTopic = ({ open, setOpen, dispatch, _id, setTopicToBeEdited }) =
   const addFAQTopic = async (e) => {
     try {
       e.preventDefault();
-      // Validation
+      if (topic.length === 0) {
+        setTopicError('Topic name required')
+        return
+      }
       const { data } = await api.post("/exam_cell/faq", {
         topic
       })
@@ -104,7 +107,10 @@ const AddEditFAQTopic = ({ open, setOpen, dispatch, _id, setTopicToBeEdited }) =
             label="Topic"
             variant="standard"
             value={topic}
-            onChange={e => setTopic(e.target.value)}
+            onChange={e => {
+              setTopicError('')
+              setTopic(e.target.value)
+            }}
             name="topic"
             error={topicError ? true : false}
             helperText={topicError}
