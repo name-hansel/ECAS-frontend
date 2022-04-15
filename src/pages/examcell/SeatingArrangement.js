@@ -6,6 +6,7 @@ import DashboardHeader from "../../components/DashboardHeader";
 import api from "../../utils/api";
 import { setSnackbar } from '../../redux/snackbar/snackbar.action';
 import SeatingArrangementJob from '../../components/SeatingArrangementJob';
+import DeleteSA from '../../components/dialog/DeleteSA';
 
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -18,11 +19,28 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 
 const SeatingArrangement = () => {
   const reduxDispatch = useDispatch();
-  // State to track current SA (Seating arrangement) from database
-  const [sa, setSA] = React.useState({
-    complete: [],
-    inProgress: []
-  });
+
+  function reducer(state, action) {
+    switch (action.type) {
+      case 'LOAD_SA':
+        return action.payload
+      case 'ADD_SA':
+        return [...state, action.payload]
+      case 'DELETE_SA':
+        return state.filter(sa => sa._id !== action.payload)
+      default:
+        throw new Error();
+    }
+  }
+
+  // _id for delete dialog
+  const [id, setId] = React.useState(null);
+
+  // State for opening/closing delete dialog
+  const [open, setOpen] = React.useState(false);
+
+  // State containing notices already in database
+  const [state, dispatch] = React.useReducer(reducer, []);
 
   // State to track if data is loading
   const [loading, setLoading] = React.useState(true);
@@ -43,7 +61,10 @@ const SeatingArrangement = () => {
     let mounted = true;
     getSeatingArrangements().then(data => {
       if (mounted) {
-        setSA(data);
+        dispatch({
+          type: 'LOAD_SA',
+          payload: data
+        });
         setLoading(false);
       }
     })
@@ -57,8 +78,12 @@ const SeatingArrangement = () => {
       <Button component={Link} to={'./add'} variant="outlined" startIcon={<AddIcon />}>Generate Seating Arrangement</Button>
       <Button variant="outlined" sx={{ marginRight: 2 }} startIcon={<RefreshIcon />} onClick={() => {
         // Get data again
-        getSeatingArrangements().then(data => setSA(data))
-        console.log(sa)
+        getSeatingArrangements().then(data => {
+          dispatch({
+            type: 'LOAD_SA',
+            payload: data
+          })
+        })
       }}>Refresh</Button>
     </Box>
     <Box sx={{ marginTop: 2 }}>
@@ -72,14 +97,12 @@ const SeatingArrangement = () => {
               <Divider />
               <Box sx={{ marginTop: 2 }} >
                 {
-                  sa.inProgress.length === 0 ? <Typography sx={{ color: '#dedede' }} textAlign="center" variant="subtitle2">
+                  state.filter(sa => !sa.complete && !sa.failed).length === 0 ? <Typography sx={{ color: '#dedede' }} textAlign="center" variant="subtitle2">
                     No seating arrangement generation in progress.
                   </Typography> :
                     <>
                       {
-
-                        sa.inProgress.map(job => <SeatingArrangementJob sa={job} />)
-
+                        state.filter(sa => !sa.complete && !sa.failed).map(job => <SeatingArrangementJob sa={job} setId={setId} setOpen={setOpen} />)
                       }
                     </>
                 }
@@ -87,16 +110,16 @@ const SeatingArrangement = () => {
             </Box>
             <Box sx={{ marginTop: 3 }}>
               <Typography variant="h5">
-                Completed
+                Finished
               </Typography>
               <Divider />
               <Box sx={{ marginTop: 2 }}>
                 {
-                  sa.complete.length === 0 ? <Typography sx={{ color: '#dedede' }} textAlign="center" variant="subtitle2">
+                  state.filter(sa => sa.complete || sa.failed).length === 0 ? <Typography sx={{ color: '#dedede' }} textAlign="center" variant="subtitle2">
                     No seating arrangement generation completed.
                   </Typography> : <>
                     {
-                      sa.complete.map(job => <SeatingArrangementJob sa={job} />)
+                      state.filter(sa => sa.complete || sa.failed).map(job => <SeatingArrangementJob sa={job} setId={setId} setOpen={setOpen} />)
                     }
                   </>
                 }
@@ -105,6 +128,12 @@ const SeatingArrangement = () => {
           </>
       }
     </Box>
+    <DeleteSA
+      open={open}
+      setOpen={setOpen}
+      dispatch={dispatch}
+      _id={id}
+    />
   </>
 }
 
