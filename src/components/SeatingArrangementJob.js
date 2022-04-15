@@ -31,16 +31,16 @@ const SeatingArrangementJob = ({ sa, setId, setOpen }) => {
 
       <Button sx={{ marginLeft: 2 }} variant="outlined">View Details</Button>
       {
-        sa.complete || sa.failed ? <IconButton sx={{ marginLeft: 2 }}>
-          <DeleteIcon onClick={() => {
-            setId(sa._id)
-            setOpen(true)
-          }} />
-        </IconButton> : <IconButton sx={{ marginLeft: 2 }}>
-          <CancelIcon onClick={() => {
-            setId(sa._id)
-            setOpen(true)
-          }} />
+        sa.complete || sa.failed ? <IconButton onClick={() => {
+          setId(sa._id)
+          setOpen(true)
+        }} sx={{ marginLeft: 2 }}>
+          <DeleteIcon />
+        </IconButton> : <IconButton onClick={() => {
+          setId(sa._id)
+          setOpen(true)
+        }} sx={{ marginLeft: 2 }}>
+          <CancelIcon />
         </IconButton>
       }
     </div>

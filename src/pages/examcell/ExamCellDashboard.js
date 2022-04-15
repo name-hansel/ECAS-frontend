@@ -20,7 +20,7 @@ import ManageFaculty from "./ManageFaculty"
 import ManageStudent from "./ManageStudent"
 import AddNotice from "./AddNotice";
 import ViewNotice from "./ViewNotice";
-// import EditNotice from "./EditNotice";
+import AddSA from "./AddSA"
 import FAQ from "./FAQ";
 import SeatingArrangement from "./SeatingArrangement"
 
@@ -84,6 +84,7 @@ export default function ExamCellDashboard() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/student" element={<ManageStudent />} />
         <Route path="/seating-arrangement" element={<SeatingArrangement />} />
+        <Route path="/seating-arrangement/add" element={<AddSA />} />
       </Routes>
     </Box>
   </Box>

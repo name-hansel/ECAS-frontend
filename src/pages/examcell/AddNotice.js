@@ -261,13 +261,13 @@ const AddNotice = () => {
         year: yearData,
         files: fileData
       })
-
       // Set state to empty array
       dispatch({
         type: 'CLEAR_FILES'
       });
       // Redirect to dashboard
       navigate("/dashboard");
+      reduxDispatch(setSnackbar(true, "success", "Posted announcement"));
     } catch (err) {
       if (err.response) {
         if (Array.isArray(err.response.data.error)) {

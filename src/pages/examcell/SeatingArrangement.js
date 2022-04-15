@@ -102,7 +102,7 @@ const SeatingArrangement = () => {
                   </Typography> :
                     <>
                       {
-                        state.filter(sa => !sa.complete && !sa.failed).map(job => <SeatingArrangementJob sa={job} setId={setId} setOpen={setOpen} />)
+                        state.filter(sa => !sa.complete && !sa.failed).map(job => <SeatingArrangementJob key={job._id} sa={job} setId={setId} setOpen={setOpen} />)
                       }
                     </>
                 }
@@ -119,7 +119,7 @@ const SeatingArrangement = () => {
                     No seating arrangement generation completed.
                   </Typography> : <>
                     {
-                      state.filter(sa => sa.complete || sa.failed).map(job => <SeatingArrangementJob sa={job} setId={setId} setOpen={setOpen} />)
+                      state.filter(sa => sa.complete || sa.failed).map(job => <SeatingArrangementJob key={job._id} sa={job} setId={setId} setOpen={setOpen} />)
                     }
                   </>
                 }
