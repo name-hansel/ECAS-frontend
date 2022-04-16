@@ -2,9 +2,8 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 
-import DashboardHeader from "../../components/DashboardHeader";
-import AddQuery from '../../components/dialog/AddQuery';
 import DeleteQuery from '../../components/dialog/DeleteQuery';
+import DashboardHeader from "../../components/DashboardHeader";
 
 import api from "../../utils/api";
 import { setSnackbar } from '../../redux/snackbar/snackbar.action';
@@ -16,13 +15,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import QueryItem from '../../components/query/student/QueryItem';
 
-import AddIcon from '@mui/icons-material/Add';
-import PersonIcon from '@mui/icons-material/Person';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const Query = () => {
+const MyQuery = () => {
   const reduxDispatch = useDispatch();
-  // Add query dialog
-  const [open, setOpen] = React.useState(false);
+
   // Delete confirmation dialog
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   // Delete id for dialog
@@ -33,7 +30,7 @@ const Query = () => {
       case 'LOAD_QUERIES':
         return action.payload;
       case 'ADD_QUERY':
-        return [action.payload, ...state]
+        return [...state, action.payload]
       case 'DELETE_QUERY':
         return state.filter(sa => sa._id !== action.payload)
       default:
@@ -46,7 +43,7 @@ const Query = () => {
 
   const getQuery = async () => {
     try {
-      const { data } = await api.get(`/student/query`);
+      const { data } = await api.get(`/student/query/user`);
       return data;
     } catch (err) {
       if (err.response) {
@@ -71,13 +68,12 @@ const Query = () => {
   }, [])
 
   return <>
-    <DashboardHeader heading={'Query'} backgroundColor={'#BBFF00'} />
+    <DashboardHeader heading={'My Queries'} backgroundColor={'#BBFF00'} />
     <Box sx={{ marginTop: 2, display: 'flex', flexDirection: 'row-reverse' }}>
-      <Button component={Link} to={'./user'} variant="outlined" startIcon={<PersonIcon />} sx={{ mx: 2 }} >My Queries</Button>
-      <Button variant="outlined" onClick={() => setOpen(true)} startIcon={<AddIcon />}>Ask query</Button>
+      <Button component={Link} to={'../query'} variant="outlined" startIcon={<ArrowBackIcon />} sx={{ mx: 2 }} >Back</Button>
     </Box>
     <Box sx={{ marginTop: 2 }}>
-      <Typography variant="h5">All Queries</Typography>
+      <Typography variant="h5">My Queries</Typography>
       <Divider />
       <Box sx={{ marginTop: 2 }}>
         {
@@ -87,11 +83,6 @@ const Query = () => {
         }
       </Box>
     </Box>
-    <AddQuery
-      open={open}
-      setOpen={setOpen}
-      dispatch={dispatch}
-    />
     <DeleteQuery
       open={deleteOpen}
       setOpen={setDeleteOpen}
@@ -101,4 +92,4 @@ const Query = () => {
   </>
 }
 
-export default Query
+export default MyQuery

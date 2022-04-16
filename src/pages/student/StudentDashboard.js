@@ -13,13 +13,14 @@ import Box from '@mui/material/Box';
 // Pages
 import Home from "./Home";
 import ViewNotice from './ViewNotice';
-import FAQ from './FAQ'
+import Query from './Query';
+import MyQuery from './MyQuery';
+import FAQ from './FAQ';
 
 // Components
 import Sidebar from "../../components/Sidebar";
 
 import { logout } from "../../redux/user/user.action"
-import Query from './Query';
 
 const StudentDashboard = () => {
   const dispatch = useDispatch();
@@ -54,6 +55,7 @@ const StudentDashboard = () => {
         <Route path="/notice/:_id" element={<ViewNotice />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/query" element={<Query />} />
+        <Route path="/query/user" element={<MyQuery />} />
       </Routes>
     </Box>
   </Box>
