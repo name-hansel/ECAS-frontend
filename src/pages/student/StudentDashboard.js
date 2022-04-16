@@ -6,6 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
 import Box from '@mui/material/Box';
 
@@ -18,6 +19,7 @@ import FAQ from './FAQ'
 import Sidebar from "../../components/Sidebar";
 
 import { logout } from "../../redux/user/user.action"
+import Query from './Query';
 
 const StudentDashboard = () => {
   const dispatch = useDispatch();
@@ -33,6 +35,10 @@ const StudentDashboard = () => {
       icon: <LiveHelpIcon />,
       to: '/dashboard/faq'
     }, {
+      text: "Query",
+      icon: <QuestionAnswerIcon />,
+      to: '/dashboard/query'
+    }, {
       text: "Logout",
       icon: <LogoutIcon />,
       to: '',
@@ -47,6 +53,7 @@ const StudentDashboard = () => {
         <Route path="/" element={<Home />} />
         <Route path="/notice/:_id" element={<ViewNotice />} />
         <Route path="/faq" element={<FAQ />} />
+        <Route path="/query" element={<Query />} />
       </Routes>
     </Box>
   </Box>

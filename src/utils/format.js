@@ -1,5 +1,6 @@
 import { formatDistance, parseJSON, add, format } from 'date-fns'
 
+// Human time
 export const getFormattedTime = (time) => {
   return formatDistance(parseJSON(time), new Date(), { addSuffix: true })
 }

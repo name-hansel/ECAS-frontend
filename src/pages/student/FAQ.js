@@ -47,7 +47,7 @@ const FAQ = () => {
     <Box sx={{ marginTop: 2 }}>
       {
         loading ? <CircularProgress /> : (
-          faqs.length === 0 ? < Typography variant='subtitle2' sx={{ margin: '0 auto', marginTop: 2 }}>No FAQs found.</Typography> : faqs.map(faq => <FAQTopic faq={faq} key={faq._id} />)
+          faqs.length === 0 ? <Typography variant='subtitle2' sx={{ margin: '0 auto', marginTop: 2 }}>No FAQs found.</Typography> : faqs.map(faq => <FAQTopic faq={faq} key={faq._id} />)
         )
       }
     </Box>
