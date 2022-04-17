@@ -48,11 +48,12 @@ const AddQuery = ({ open, setOpen, dispatch }) => {
   return <Dialog fullWidth open={open} onClose={closeDialog}>
     <DialogTitle sx={{ pb: 1 }}>Ask query</DialogTitle>
     <form onSubmit={askQuery}>
-      <DialogContent sx={{ display: 'flex', flexDirection: 'column', pt: 0 }}>
+      <DialogContent sx={{ display: 'flex', flexDirection: 'column' }}>
         <TextField
           label="Question"
-          variant="standard"
           value={question}
+          multiline
+          rows={4}
           onChange={e => {
             setQuestionError('')
             setQuestion(e.target.value)

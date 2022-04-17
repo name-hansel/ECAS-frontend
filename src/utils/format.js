@@ -21,5 +21,6 @@ export const isSendEmailInOver = (createdAt, minutes) => {
 }
 
 export const getFormattedDate = (time) => {
+  if (!time) return ""
   return format(parseJSON(time), "iiii, dd MMMM yyyy")
 }

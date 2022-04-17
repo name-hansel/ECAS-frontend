@@ -11,6 +11,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import HomeIcon from '@mui/icons-material/Home';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import ChairAltIcon from '@mui/icons-material/ChairAlt';
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 
 // Pages
 import Home from "./Home"
@@ -22,6 +23,7 @@ import AddNotice from "./AddNotice";
 import ViewNotice from "./ViewNotice";
 import AddSA from "./AddSA"
 import FAQ from "./FAQ";
+import Query from "./Query";
 import SeatingArrangement from "./SeatingArrangement"
 
 // Components
@@ -63,6 +65,10 @@ export default function ExamCellDashboard() {
       icon: <LiveHelpIcon />,
       to: '/dashboard/faq'
     }, {
+      text: "Query",
+      icon: <QuestionAnswerIcon />,
+      to: '/dashboard/query'
+    }, {
       text: "Logout",
       icon: <LogoutIcon />,
       to: '',
@@ -82,6 +88,7 @@ export default function ExamCellDashboard() {
         <Route path="/course" element={<ManageCourse />} />
         <Route path="/faculty" element={<ManageFaculty />} />
         <Route path="/faq" element={<FAQ />} />
+        <Route path="/query" element={<Query />} />
         <Route path="/student" element={<ManageStudent />} />
         <Route path="/seating-arrangement" element={<SeatingArrangement />} />
         <Route path="/seating-arrangement/add" element={<AddSA />} />

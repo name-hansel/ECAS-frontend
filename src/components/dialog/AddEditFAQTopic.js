@@ -95,7 +95,7 @@ const AddEditFAQTopic = ({ open, setOpen, dispatch, _id, setTopicToBeEdited }) =
   }
 
   return (
-    loading ? <></> : <Dialog open={open} onClose={setDialogClose}>
+    loading ? <></> : <Dialog fullWidth open={open} onClose={setDialogClose}>
       <DialogTitle>
         {
           _id ? "Edit Topic" : "Add New Topic"
@@ -105,7 +105,6 @@ const AddEditFAQTopic = ({ open, setOpen, dispatch, _id, setTopicToBeEdited }) =
         <DialogContent sx={{ display: 'flex', flexDirection: 'column' }}>
           <TextField
             label="Topic"
-            variant="standard"
             value={topic}
             onChange={e => {
               setTopicError('')

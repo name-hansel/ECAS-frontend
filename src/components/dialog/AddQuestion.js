@@ -86,7 +86,7 @@ const AddQuestion = ({ open, setOpen, dispatch, _id }) => {
   }
 
   return (
-    <Dialog open={open} onClose={setDialogClose}>
+    <Dialog open={open} onClose={setDialogClose} fullWidth>
       <DialogTitle>
         Add Question to FAQ Topic
       </DialogTitle>
@@ -94,7 +94,6 @@ const AddQuestion = ({ open, setOpen, dispatch, _id }) => {
         <DialogContent sx={{ display: 'flex', flexDirection: 'column' }}>
           <TextField
             label="Question"
-            variant="standard"
             value={faq.question}
             onChange={e => setFAQ({ ...faq, question: e.target.value })}
             name="question"
@@ -104,7 +103,8 @@ const AddQuestion = ({ open, setOpen, dispatch, _id }) => {
           <TextField
             sx={{ marginTop: 1 }}
             label="Answer"
-            variant="standard"
+            multiline
+            rows={4}
             value={faq.answer}
             onChange={e => setFAQ({ ...faq, answer: e.target.value })}
             name="answer"
