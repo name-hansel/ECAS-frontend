@@ -13,8 +13,9 @@ import Box from '@mui/material/Box';
 import Sidebar from "../../components/Sidebar";
 import { logout } from "../../redux/user/user.action";
 
-import Home from "./Home"
-import Quiz from "./Quiz"
+import Home from "./Home";
+import Quiz from "./Quiz";
+import AddQuiz from './AddQuiz';
 
 const FacultyDashboard = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const FacultyDashboard = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz/add" element={<AddQuiz />} />
       </Routes>
     </Box>
   </Box>
