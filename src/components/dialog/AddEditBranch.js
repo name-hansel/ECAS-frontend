@@ -163,7 +163,7 @@ const AddEditBranch = ({
   }
 
   return (
-    loading ? <></> : <Dialog open={open} onClose={setDialogClose}>
+    loading ? <></> : <Dialog fullWidth open={open} onClose={setDialogClose}>
       <DialogTitle>
         {
           _id ? "Edit Branch" : "Add New Branch"

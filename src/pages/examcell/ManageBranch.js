@@ -22,8 +22,8 @@ import IconButton from '@mui/material/IconButton';
 
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import ArchiveIcon from '@mui/icons-material/Archive'
-import UnarchiveIcon from '@mui/icons-material/Unarchive'
+import ArchiveIcon from '@mui/icons-material/Archive';
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
 
 const ManageBranch = () => {
   // State containing branches already in database
@@ -138,7 +138,7 @@ const ManageBranch = () => {
 
   return (
     <>
-      <DashboardHeader heading={'Manage Branch'} backgroundColor={'#88EED3'} />
+      <DashboardHeader heading={'Manage Branch'} backgroundColor={'#88DDAA'} />
       {
         <Box sx={{ display: 'inline-flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           {
@@ -220,7 +220,7 @@ const ManageBranch = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {/* Map through array of active branches */}
+                          {/* Map through array of archived branches */}
                           {
                             state.archived.map((branch, index) => (
                               <TableRow key={branch.code}>

@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
 const AttachmentItems = ({ fileName }) => {
-  const extension = fileName.split(".")[2]
+  const extension = fileName.split(".").pop();
   return <Link href={`${process.env.REACT_APP_BASE_URL}/api/public/notice/${fileName}`} underline="hover" target="_blank" rel="noreferrer">
     <Paper
       elevation={0}

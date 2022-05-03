@@ -61,6 +61,7 @@ const Sidebar = ({ itemList, name, avatar, role }) => {
         const { text, icon, to, onClick } = item;
         return (
           <CustomListItemButton
+            sx={{ m: 0, p: 0.5 }}
             key={text}
             component={Link}
             to={to}

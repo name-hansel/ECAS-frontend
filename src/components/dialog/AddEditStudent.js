@@ -175,7 +175,7 @@ const AddEditStudent = ({
     }
   }
 
-  // Function to handle onSubmit form to edit branch
+  // Function to handle onSubmit form to edit student
   const editStudent = async (e) => {
     try {
       e.preventDefault();
@@ -207,7 +207,7 @@ const AddEditStudent = ({
   }
 
   return (
-    loading ? <></> : <Dialog open={open} onClose={setDialogClose}>
+    loading ? <></> : <Dialog fullWidth open={open} onClose={setDialogClose}>
       <DialogTitle>
         {
           _id ? "Edit Student" : "Add New Student"

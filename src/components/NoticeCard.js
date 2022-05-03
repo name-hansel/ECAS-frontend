@@ -12,7 +12,6 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 
 import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const NoticeCard = ({ notice, setOpen, open, setId }) => {
@@ -80,23 +79,16 @@ const NoticeCard = ({ notice, setOpen, open, setId }) => {
             }
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignSelf: 'center', width: '10%' }}>
-          {
-            (!sendNotification || !isSendEmailInOver(createdAt, sendEmailIn)) ? <>
-              <IconButton
-              //onClick={() => navigate(`./notice/${_id}/edit`)}
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton onClick={e => {
-                setId(_id)
-                setOpen(true)
-              }} >
-                <DeleteIcon />
-              </IconButton>
-            </> : <></>
-          }
-        </Box>
+        {
+          (!sendNotification || !isSendEmailInOver(createdAt, sendEmailIn)) ? <>
+            <IconButton onClick={e => {
+              setId(_id)
+              setOpen(true)
+            }} >
+              <DeleteIcon />
+            </IconButton>
+          </> : <></>
+        }
       </Box>
       {
         sendNotification && <><Divider />

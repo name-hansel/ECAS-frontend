@@ -15,14 +15,17 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography'
+import Typography from '@mui/material/Typography';
+import TextField from "@mui/material/TextField";
+import InputAdornment from '@mui/material/InputAdornment';
 
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import ArchiveIcon from '@mui/icons-material/Archive'
-import UnarchiveIcon from '@mui/icons-material/Unarchive'
+import ArchiveIcon from '@mui/icons-material/Archive';
+import SearchIcon from "@mui/icons-material/Search";
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
 
 const ManageStudent = () => {
   // Reducer for students
@@ -135,18 +138,31 @@ const ManageStudent = () => {
   }));
 
   return <>
-    <DashboardHeader heading={"Manage Students"} backgroundColor={'#99EEB3'} />
+    <DashboardHeader heading={"Manage Students"} backgroundColor={'#55AAB3'} />
     <Box sx={{ display: 'inline-flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       {
         loading ? <CircularProgress /> : <>
-          <Button
-            variant="outlined"
-            startIcon={<AddIcon />}
-            sx={{ flexGrow: 0, marginTop: 2, alignSelf: 'flex-end' }}
-            onClick={() => setOpen(true)}
-          >
-            Add New Student
-          </Button>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', p: 2, alignItems: 'center' }}>
+            <TextField
+              label="Search"
+              sx={{ width: '80%' }}
+              InputProps={{
+                endAdornment: <InputAdornment>
+                  <IconButton>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>,
+              }}
+            />
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              sx={{ flexGrow: 0, alignSelf: 'stretch' }}
+              onClick={() => setOpen(true)}
+            >
+              Add New Student
+            </Button>
+          </Box>
           {/* Active students */}
           <Box sx={{ display: 'inline-flex', flexDirection: 'column', width: '100%' }}>
             <Typography variant='h5'>
