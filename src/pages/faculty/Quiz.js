@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 import DashboardHeader from "../../components/DashboardHeader";
 import api from "../../utils/api";
 import { setSnackbar } from '../../redux/snackbar/snackbar.action';
-import SeatingArrangementJob from '../../components/SeatingArrangementJob';
-import DeleteSA from '../../components/dialog/DeleteSA';
+import QuizJob from '../../components/QuizJob';
+import DeleteQuiz from '../../components/dialog/DeleteQuiz';
 
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -17,17 +17,17 @@ import Divider from '@mui/material/Divider'
 import AddIcon from '@mui/icons-material/Add';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-const SeatingArrangement = () => {
+const Quiz = () => {
   const reduxDispatch = useDispatch();
 
   function reducer(state, action) {
     switch (action.type) {
-      case 'LOAD_SA':
+      case 'LOAD_QUIZ':
         return action.payload
-      case 'ADD_SA':
+      case 'ADD_QUIZ':
         return [...state, action.payload]
-      case 'DELETE_SA':
-        return state.filter(sa => sa._id !== action.payload)
+      case 'DELETE_QUIZ':
+        return state.filter(quiz => quiz._id !== action.payload)
       default:
         throw new Error();
     }
@@ -39,15 +39,15 @@ const SeatingArrangement = () => {
   // State for opening/closing delete dialog
   const [open, setOpen] = React.useState(false);
 
-  // State containing seating arrangements already in database
+  // State containing quizzes already in database
   const [state, dispatch] = React.useReducer(reducer, []);
 
   // State to track if data is loading
   const [loading, setLoading] = React.useState(true);
 
-  const getSeatingArrangements = async () => {
+  const getQuizzes = async () => {
     try {
-      const { data } = await api.get("/exam_cell/seating");
+      const { data } = await api.get("/faculty/quiz");
       return data;
     } catch (err) {
       if (err.response) {
@@ -59,10 +59,10 @@ const SeatingArrangement = () => {
   // useEffect hook to populate state on load
   React.useEffect(() => {
     let mounted = true;
-    getSeatingArrangements().then(data => {
+    getQuizzes().then(data => {
       if (mounted) {
         dispatch({
-          type: 'LOAD_SA',
+          type: 'LOAD_QUIZ',
           payload: data
         });
         setLoading(false);
@@ -71,16 +71,15 @@ const SeatingArrangement = () => {
     return () => mounted = false;
   }, [])
 
-
   return <>
-    <DashboardHeader heading="Seating Arrangement" backgroundColor={'#eeaa66'} />
+    <DashboardHeader heading="Quiz" backgroundColor={'#aebe66'} />
     <Box sx={{ marginTop: 2, display: 'flex', flexDirection: 'row-reverse' }}>
-      <Button component={Link} to={'./add'} variant="outlined" startIcon={<AddIcon />}>Generate Seating Arrangement</Button>
+      <Button component={Link} to={'./add'} variant="outlined" startIcon={<AddIcon />}>Generate Quiz</Button>
       <Button variant="outlined" sx={{ marginRight: 2 }} startIcon={<RefreshIcon />} onClick={() => {
         // Get data again
-        getSeatingArrangements().then(data => {
+        getQuizzes().then(data => {
           dispatch({
-            type: 'LOAD_SA',
+            type: 'LOAD_QUIZ',
             payload: data
           })
         })
@@ -98,11 +97,11 @@ const SeatingArrangement = () => {
               <Box sx={{ marginTop: 2 }} >
                 {
                   state.filter(sa => !sa.complete && !sa.failed).length === 0 ? <Typography sx={{ color: '#dedede' }} textAlign="center" variant="subtitle2">
-                    No seating arrangement generation in progress.
+                    No quiz generation in progress.
                   </Typography> :
                     <>
                       {
-                        state.filter(sa => !sa.complete && !sa.failed).map(job => <SeatingArrangementJob key={job._id} sa={job} setId={setId} setOpen={setOpen} />)
+                        state.filter(quiz => !quiz.complete && !quiz.failed).map(job => <QuizJob key={job._id} quiz={job} setId={setId} setOpen={setOpen} />)
                       }
                     </>
                 }
@@ -116,10 +115,10 @@ const SeatingArrangement = () => {
               <Box sx={{ marginTop: 2 }}>
                 {
                   state.filter(sa => sa.complete || sa.failed).length === 0 ? <Typography sx={{ color: '#dedede' }} textAlign="center" variant="subtitle2">
-                    No seating arrangement generation completed.
+                    No quiz generation completed.
                   </Typography> : <>
                     {
-                      state.filter(sa => sa.complete || sa.failed).map(job => <SeatingArrangementJob key={job._id} sa={job} setId={setId} setOpen={setOpen} />)
+                      state.filter(sa => sa.complete || sa.failed).map(job => <QuizJob key={job._id} quiz={job} setId={setId} setOpen={setOpen} />)
                     }
                   </>
                 }
@@ -128,7 +127,7 @@ const SeatingArrangement = () => {
           </>
       }
     </Box>
-    <DeleteSA
+    <DeleteQuiz
       open={open}
       setOpen={setOpen}
       dispatch={dispatch}
@@ -137,4 +136,4 @@ const SeatingArrangement = () => {
   </>
 }
 
-export default SeatingArrangement
+export default Quiz
