@@ -16,6 +16,7 @@ import { logout } from "../../redux/user/user.action";
 import Home from "./Home";
 import Quiz from "./Quiz";
 import AddQuiz from './AddQuiz';
+import ViewNotice from './ViewNotice';
 
 const FacultyDashboard = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const FacultyDashboard = () => {
     >
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/notice/:_id" element={<ViewNotice />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/quiz/add" element={<AddQuiz />} />
       </Routes>
