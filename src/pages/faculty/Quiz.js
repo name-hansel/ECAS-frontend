@@ -26,6 +26,11 @@ const Quiz = () => {
         return action.payload
       case 'ADD_QUIZ':
         return [...state, action.payload]
+      case 'UPDATE_QUIZ':
+        return state.map(quiz => {
+          if (quiz._id === action.payload._id) return action.payload
+          return quiz
+        })
       case 'DELETE_QUIZ':
         return state.filter(quiz => quiz._id !== action.payload)
       default:
@@ -70,6 +75,13 @@ const Quiz = () => {
     })
     return () => mounted = false;
   }, [])
+
+  const updateQuiz = (newQuiz) => {
+    dispatch({
+      type: 'UPDATE_QUIZ',
+      payload: newQuiz
+    })
+  }
 
   return <>
     <DashboardHeader heading="Quiz" backgroundColor={'#aebe66'} />
@@ -118,7 +130,7 @@ const Quiz = () => {
                     No quiz generation completed.
                   </Typography> : <>
                     {
-                      state.filter(sa => sa.complete || sa.failed).map(job => <QuizJob key={job._id} quiz={job} setId={setId} setOpen={setOpen} />)
+                      state.filter(sa => sa.complete || sa.failed).map(job => <QuizJob key={job._id} quiz={job} setId={setId} setOpen={setOpen} updateQuiz={updateQuiz} />)
                     }
                   </>
                 }

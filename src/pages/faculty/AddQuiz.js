@@ -31,7 +31,8 @@ const AddQuiz = () => {
     numberOfQuestionsInQuizError: "",
     rowsError: "",
     columnsError: "",
-    numberOfStudentsError: ""
+    numberOfStudentsError: "",
+    divisionError: ""
   })
 
   // State to handle form data about quiz
@@ -42,7 +43,8 @@ const AddQuiz = () => {
     numberOfQuestionsInQuiz: "",
     rows: "",
     columns: "",
-    numberOfStudents: ""
+    numberOfStudents: "",
+    division: ""
   });
 
   // Function to get courses
@@ -76,7 +78,7 @@ const AddQuiz = () => {
   }
 
   const quizValidation = () => {
-    let titleError = "", courseError = "", questionsFileError = "", numberOfQuestionsInQuizError = "", numberOfStudentsError = "", rowsError = "", columnsError = "";
+    let titleError = "", courseError = "", questionsFileError = "", numberOfQuestionsInQuizError = "", numberOfStudentsError = "", rowsError = "", columnsError = "", divisionError = "";
 
     if (!quiz.title || quiz.title.length === 0) titleError = "Title is required";
     if (!quiz.course || quiz.course.length === 0) courseError = "Course is required";
@@ -85,10 +87,11 @@ const AddQuiz = () => {
     if (!quiz.numberOfStudents || quiz.numberOfStudents.length === 0) numberOfStudentsError = "Number of students is required";
     if (!quiz.rows || quiz.rows.length === 0) rowsError = "Number of rows in room required";
     if (!quiz.columns || quiz.columns.length === 0) columnsError = "Number of columns in room required";
+    if (!quiz.division || quiz.division.length === 0) columnsError = "Division is required";
 
     // Return false if any error exists, to stop form from sending data
-    if (titleError || courseError || questionsFileError || numberOfQuestionsInQuizError || numberOfStudentsError || rowsError || columnsError) {
-      setFormErrors({ ...formErrors, titleError, courseError, questionsFileError, numberOfQuestionsInQuizError, numberOfStudentsError, rowsError, columnsError });
+    if (titleError || courseError || questionsFileError || numberOfQuestionsInQuizError || numberOfStudentsError || rowsError || columnsError || divisionError) {
+      setFormErrors({ ...formErrors, titleError, courseError, questionsFileError, numberOfQuestionsInQuizError, numberOfStudentsError, rowsError, columnsError, divisionError });
       return false;
     }
     return true;
@@ -157,21 +160,41 @@ const AddQuiz = () => {
             />
           </Box>
         </Box>
-        <Box sx={{ mt: 2 }}>
-          <Typography variant="h6">Course</Typography>
-          <FormControl sx={{ width: 1 }}>
-            <Select
-              value={quiz.course}
+        <Box sx={{ mt: 2, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 3 }}>
+          <Box style={{ width: '50%' }}>
+            <Typography variant="h6">Course</Typography>
+            <FormControl sx={{ width: 1 }}>
+              <Select
+                value={quiz.course}
+                onChange={handleFormChange}
+                displayEmpty
+                name="course"
+                inputProps={{ 'aria-label': 'Course' }}
+              >
+                {
+                  courses.map(course => <MenuItem key={course._id} value={course._id}>{course.code} - {course.name} - {course.branch.name}</MenuItem>)
+                }
+              </Select>
+            </FormControl>
+          </Box>
+          <Box style={{ width: '40%' }}>
+            <Typography variant="h6">Division</Typography>
+            <TextField
+              variant="outlined"
+              value={quiz.division}
               onChange={handleFormChange}
-              displayEmpty
-              name="course"
-              inputProps={{ 'aria-label': 'Course' }}
-            >
-              {
-                courses.map(course => <MenuItem key={course._id} value={course._id}>{course.code} - {course.name} - {course.branch.name}</MenuItem>)
-              }
-            </Select>
-          </FormControl>
+              InputProps={{
+                startAdornment: <InputAdornment>
+                  Division
+                </InputAdornment>,
+              }}
+              name="division"
+              fullWidth
+              required
+              error={formErrors.divisionError ? true : false}
+              helperText={formErrors.divisionError}
+            />
+          </Box>
         </Box>
         <Box sx={{ mt: 2, display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', mb: 3 }}>
           <div style={{ width: '50%' }}>
