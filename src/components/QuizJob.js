@@ -89,7 +89,7 @@ const QuizJob = ({ quiz, setId, setOpen, updateQuiz }) => {
           `Semester ${quiz.course.semester} - ${quiz.division}`
         }</Typography>
         <Typography variant="subtitle1">{
-          !quiz.complete && !quiz.failed ? <Typography sx={{ color: 'gray' }}>In progress</Typography> : quiz.failed ? <Typography sx={{ color: 'red' }}>Failed</Typography> : <Stack direction="row" spacing={2}>
+          !quiz.complete && !quiz.failed ? <Typography sx={{ color: 'gray' }}>In progress</Typography> : quiz.failed ? <Typography sx={{ color: 'red' }}>{`Failed - ${quiz.error}`}</Typography> : <Stack direction="row" spacing={2}>
             <Typography sx={{ color: 'green', marginTop: '2px' }}>Completed</Typography>
             {/* Download seating arrangement */}
             <Link href={`${process.env.REACT_APP_BASE_URL}/api/public/quiz/${quiz.solutionFile}`} target="_blank" rel="noreferrer">
@@ -127,7 +127,11 @@ const QuizJob = ({ quiz, setId, setOpen, updateQuiz }) => {
       showDetails ? <>
         <Divider />
         <Box sx={{ display: 'flex', marginTop: 2, justifyContent: 'space-between' }}>
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ mr: 2 }}>
+              <Typography>Number of students: {quiz.numberOfStudents}</Typography>
+              <Typography>Number of questions in quiz: {quiz.numberOfQuestionsInQuiz}</Typography>
+            </Box>
             <Link href={`${process.env.REACT_APP_BASE_URL}/api/public/quiz/${quiz.questionsFile}`} underline="hover" target="_blank" rel="noreferrer">
               <ModifiedPaper variant="outlined" elevation={0}>
                 <PersonIcon sx={{ marginRight: 1 }} />

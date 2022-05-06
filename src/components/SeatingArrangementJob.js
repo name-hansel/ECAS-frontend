@@ -38,7 +38,7 @@ const SeatingArrangementJob = ({ sa, setId, setOpen }) => {
         <Typography variant="h6">{sa.title}</Typography>
         <Typography variant="subtitle1">Exam Date: {getFormattedDate(sa.dateOfExam)}</Typography>
         <Typography variant="subtitle1">{
-          !sa.complete && !sa.failed ? <Typography sx={{ color: 'gray' }}>In progress</Typography> : sa.failed ? <Typography sx={{ color: 'red' }}>Failed</Typography> : <Stack direction="row" spacing={2}>
+          !sa.complete && !sa.failed ? <Typography sx={{ color: 'gray' }}>In progress</Typography> : sa.failed ? <Typography sx={{ color: 'red' }}>Failed - {sa.error}</Typography> : <Stack direction="row" spacing={2}>
             <Typography sx={{ color: 'green', marginTop: '2px' }}>Completed</Typography>
             {/* Download seating arrangement */}
             <Link href={`${process.env.REACT_APP_BASE_URL}/api/public/seating/${sa.solutionFile}`} target="_blank" rel="noreferrer">
