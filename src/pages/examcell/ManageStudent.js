@@ -1,5 +1,6 @@
-import { useState, useEffect, useReducer } from "react"
+import { useState, useEffect, useReducer, useCallback } from "react"
 import api from "../../utils/api"
+import debounce from "lodash.debounce";
 
 import DashboardHeader from "../../components/DashboardHeader"
 import AddEditStudent from "../../components/dialog/AddEditStudent";
@@ -137,6 +138,33 @@ const ManageStudent = () => {
     },
   }));
 
+  const debounceSearch = useCallback(
+    debounce(async (search) => {
+      if (search !== "") {
+        const { data } = await api.get(`/exam_cell/student/search?searchString=${search}`);
+        dispatch({
+          type: 'LOAD_STUDENTS',
+          payload: data
+        });
+      } else {
+        getStudents().then(data => {
+          dispatch({
+            type: 'LOAD_STUDENTS',
+            payload: data
+          });
+        })
+      }
+    }, 250),
+    []
+  );
+
+  const [searchString, setSearchString] = useState([]);
+  const onChange = (e) => {
+    const search = e.target.value;
+    setSearchString(search);
+    debounceSearch(search);
+  }
+
   return <>
     <DashboardHeader heading={"Manage Students"} backgroundColor={'#55AAB3'} />
     <Box sx={{ display: 'inline-flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -144,7 +172,9 @@ const ManageStudent = () => {
         loading ? <CircularProgress /> : <>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', p: 2, alignItems: 'center' }}>
             <TextField
+              onChange={onChange}
               label="Search"
+              value={searchString}
               sx={{ width: '80%' }}
               InputProps={{
                 endAdornment: <InputAdornment>
