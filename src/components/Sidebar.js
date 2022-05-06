@@ -2,7 +2,7 @@ import { Drawer, Avatar, List, ListItemButton, ListItemIcon, ListItemText, Typog
 import { styled } from '@mui/material/styles';
 import { Link, useLocation } from "react-router-dom"
 
-const Sidebar = ({ itemList, name, avatar, role }) => {
+const Sidebar = ({ itemList, name, avatar, role, semester, division, branchName }) => {
   const drawerWidth = 250;
   const location = useLocation();
 
@@ -51,6 +51,18 @@ const Sidebar = ({ itemList, name, avatar, role }) => {
     }}>
       {role}
     </Typography>
+    }
+    {
+      role === 'Student' && <>
+        <Typography variant="subtitle2" gutterBottom component="div" style={{
+          textAlign: "center",
+          margin: '0 auto',
+        }}>{`Semester ${semester} - Division ${division}`}</Typography>
+        <Typography variant="subtitle2" gutterBottom component="div" style={{
+          textAlign: "center",
+          margin: '0 auto',
+        }}>{branchName}</Typography>
+      </>
     }
     {/* List */}
     <List style={{

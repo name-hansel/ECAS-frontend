@@ -208,6 +208,7 @@ const AddEditCourse = ({
       <form onSubmit={_id ? editCourse : addCourse}>
         <DialogContent>
           <TextField
+            sx={{ m: 1 }}
             label="Code"
             variant="standard"
             value={course.code}
@@ -218,6 +219,7 @@ const AddEditCourse = ({
           />
           <TextField
             label="Name"
+            sx={{ m: 1 }}
             variant="standard"
             value={course.name}
             onChange={handleFormChange}
@@ -227,6 +229,7 @@ const AddEditCourse = ({
           />
           <TextField
             label="Semester"
+            sx={{ m: 1 }}
             variant="standard"
             value={course.semester}
             onChange={handleFormChange}
@@ -234,7 +237,7 @@ const AddEditCourse = ({
             error={formErrors.semesterError ? true : false}
             helperText={formErrors.semesterError}
           />
-          <FormControl sx={{ width: 0.5 }}>
+          <FormControl sx={{ width: 0.5, m: 1 }}>
             <InputLabel id="branch">Branch</InputLabel>
             <Select
               labelId="branch"
@@ -250,7 +253,7 @@ const AddEditCourse = ({
             <FormHelperText>{formErrors.branchError}</FormHelperText>
           </FormControl>
           {/* Mandatory or optional */}
-          <FormControl>
+          <FormControl sx={{ m: 1 }}>
             <FormLabel id="demo-radio-buttons-group-label">Mandatory or Optional Course</FormLabel>
             <RadioGroup
               row
@@ -274,7 +277,7 @@ const AddEditCourse = ({
           </Button>
         </DialogActions>
       </form>
-    </Dialog>
+    </Dialog >
   )
 }
 

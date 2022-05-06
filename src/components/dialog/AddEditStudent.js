@@ -216,6 +216,7 @@ const AddEditStudent = ({
       <form onSubmit={_id ? editStudent : addStudent}>
         <DialogContent>
           <TextField
+            sx={{ m: 1 }}
             label="Admission Number"
             variant="standard"
             value={student.admissionNumber}
@@ -225,6 +226,7 @@ const AddEditStudent = ({
             helperText={formErrors.admissionNumberError}
           />
           <TextField
+            sx={{ m: 1 }}
             label="First Name"
             variant="standard"
             value={student.firstName}
@@ -234,6 +236,7 @@ const AddEditStudent = ({
             helperText={formErrors.firstNameError}
           />
           <TextField
+            sx={{ m: 1 }}
             label="Middle Name"
             variant="standard"
             value={student.middleName}
@@ -243,6 +246,7 @@ const AddEditStudent = ({
             helperText={formErrors.middleNameError}
           />
           <TextField
+            sx={{ m: 1 }}
             label="Last Name"
             variant="standard"
             value={student.lastName}
@@ -251,7 +255,7 @@ const AddEditStudent = ({
             error={formErrors.lastNameError ? true : false}
             helperText={formErrors.lastNameError}
           />
-          <FormControl sx={{ width: 0.5 }}>
+          <FormControl sx={{ m: 1, width: 0.5 }}>
             <InputLabel id="branch">Branch</InputLabel>
             <Select
               labelId="branch"
@@ -266,6 +270,7 @@ const AddEditStudent = ({
             </Select>
           </FormControl>
           <TextField
+            sx={{ m: 1 }}
             label="Current Semester"
             variant="standard"
             value={student.currentSemester}
@@ -275,6 +280,7 @@ const AddEditStudent = ({
             helperText={formErrors.currentSemesterError}
           />
           <TextField
+            sx={{ m: 1 }}
             label="Current Division"
             variant="standard"
             value={student.currentDivision}
@@ -284,6 +290,7 @@ const AddEditStudent = ({
             helperText={formErrors.currentDivisionError}
           />
           <TextField
+            sx={{ m: 1 }}
             label="Email"
             variant="standard"
             value={student.email}
@@ -293,6 +300,7 @@ const AddEditStudent = ({
             helperText={formErrors.emailError}
           />
           <TextField
+            sx={{ m: 1 }}
             label="Phone Number"
             variant="standard"
             value={student.phoneNumber}

@@ -7,6 +7,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import GradingIcon from '@mui/icons-material/Grading';
 
 import Box from '@mui/material/Box';
 
@@ -42,7 +43,7 @@ const StudentDashboard = () => {
       to: '/dashboard/query'
     }, {
       text: "Quiz Results",
-      icon: <QuestionAnswerIcon />,
+      icon: <GradingIcon />,
       to: '/dashboard/quiz-result'
     }, {
       text: "Logout",
@@ -50,7 +51,7 @@ const StudentDashboard = () => {
       to: '',
       onClick: e => dispatch(logout())
     },
-    ]} avatar={user.picture} name={[user.firstName, user.lastName].join(" ")} role={"Student"} />
+    ]} avatar={user.picture} name={[user.firstName, user.lastName].join(" ")} role={"Student"} branchName={user.branchName} semester={user.semester} division={user.division} />
     <Box
       component="main"
       sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, p: 3 }}

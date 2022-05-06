@@ -101,7 +101,7 @@ const QuizJob = ({ quiz, setId, setOpen, updateQuiz }) => {
       <div style={{ display: 'flex', alignItems: 'center' }}>
         {
           quiz.complete && !quiz.failed ? quiz.resultFile ? !quiz.resultPublish ? <Button startIcon={<PublishIcon />} variant="outlined" onClick={publishResult}>Publish Results</Button> : <Button startIcon={<DoneAllIcon />} variant="outlined" disabled>Result Published</Button> : <div>
-            <input onChange={handleChange} multiple={false} ref={fileInputRef} type='file' hidden />
+            <input accept=".csv" onChange={handleChange} multiple={false} ref={fileInputRef} type='file' hidden />
             <Button onClick={() => fileInputRef.current.click()} sx={{ marginLeft: 2 }} startIcon={<FileUploadIcon />} variant="outlined">Upload Results</Button>
           </div> : null
         }
