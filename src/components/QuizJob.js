@@ -84,7 +84,8 @@ const QuizJob = ({ quiz, setId, setOpen, updateQuiz }) => {
     <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: showDetails ? 1 : 0 }}>
       <div>
         <Typography variant="h6">{quiz.title}</Typography>
-        <Typography variant="subtitle1">Course: {quiz.course.name}</Typography><Typography variant="subtitle1">Class: {
+        <Typography variant="subtitle1">Course: {quiz.course.name}</Typography>
+        <Typography variant="subtitle1">Class: {
           `Semester ${quiz.course.semester} - ${quiz.division}`
         }</Typography>
         <Typography variant="subtitle1">{

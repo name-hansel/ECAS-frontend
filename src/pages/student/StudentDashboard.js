@@ -21,6 +21,7 @@ import FAQ from './FAQ';
 import Sidebar from "../../components/Sidebar";
 
 import { logout } from "../../redux/user/user.action"
+import Quiz from './Quiz';
 
 const StudentDashboard = () => {
   const dispatch = useDispatch();
@@ -40,6 +41,10 @@ const StudentDashboard = () => {
       icon: <QuestionAnswerIcon />,
       to: '/dashboard/query'
     }, {
+      text: "Quiz Results",
+      icon: <QuestionAnswerIcon />,
+      to: '/dashboard/quiz-result'
+    }, {
       text: "Logout",
       icon: <LogoutIcon />,
       to: '',
@@ -56,6 +61,7 @@ const StudentDashboard = () => {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/query" element={<Query />} />
         <Route path="/query/user" element={<MyQuery />} />
+        <Route path="/quiz-result" element={<Quiz />} />
       </Routes>
     </Box>
   </Box>
