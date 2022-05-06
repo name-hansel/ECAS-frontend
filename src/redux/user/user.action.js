@@ -27,7 +27,7 @@ export const loadUser = () => {
 }
 
 // Used only for admin login
-export const login = (password) => {
+export const login = (password, setLoading) => {
   return async dispatch => {
     try {
       await api.post('/admin/auth/login', { password });
@@ -37,7 +37,9 @@ export const login = (password) => {
           role: "admin"
         }
       })
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       if (err.response) dispatch({
         type: SET_SNACKBAR,
         payload: {

@@ -18,14 +18,16 @@ const AttachmentItems = ({ fileName }) => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        maxWidth: '300px'
+        maxWidth: '15rem'
       }}>
       <div style={{ width: '50px' }}>
         <FileIcon extension={extension} {...defaultStyles[extension]} />
       </div>
-      <Typography sx={{ alignSelf: 'flex-start', marginTop: 1 }}>
-        {fileName}
-      </Typography>
+      <div style={{ overflow: "hidden", textOverflow: "ellipsis", width: '15rem' }}>
+        <Typography sx={{ alignSelf: 'flex-start', marginTop: 1 }}>
+          {fileName}
+        </Typography>
+      </div>
     </Paper>
   </Link>
 }
